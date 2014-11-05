@@ -19,6 +19,10 @@ namespace UCsoft.Web
             WebApiConfig.Register(GlobalConfiguration.Configuration);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+
+
+            //测试路由
+            RouteDebug.RouteDebugger.RewriteRoutesForTesting(RouteTable.Routes);
         }
     }
 }
