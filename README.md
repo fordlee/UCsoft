@@ -11,6 +11,7 @@ Unit Test单元测试、RouteDebug路由测试、Log4Net日志记录、支持多
 >开发工具：Microsoft Visual Studio 2013      
 >作者: Terwer,Huang   
 >作者邮箱: cbgtyw@gmail.com   
+>作者博客: [http://www.terwer.com](http://www.terwer.com)       
 
 项目简介
 -------
