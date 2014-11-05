@@ -238,6 +238,10 @@
     <Content Include="Areas\HelpPage\Images\orderedList7.png" />
     <Content Include="Areas\HelpPage\Images\orderedList8.png" />
     <Content Include="Areas\HelpPage\Images\orderedList9.png" />
+    <Content Include="Configs\Daos.xml" />
+    <Content Include="Configs\Objects.xml" />
+    <Content Include="Configs\Services.xml" />
+    <Content Include="Configs\Webs.xml" />
     <Content Include="Global.asax" />
     <Content Include="ie6update.html" />
     <Content Include="Themes\default\base\images\ie_update.jpg" />
