@@ -5,7 +5,10 @@ VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UCsoft.Doc", "UCsoft.Doc", "{33D2AB9E-85E9-413A-A684-A2BD1DD0BB7F}"
 	ProjectSection(SolutionItems) = preProject
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
 		README.md = README.md
+		UCsoft.sln.GhostDoc.xml = UCsoft.sln.GhostDoc.xml
 		WE-Markdown.css = WE-Markdown.css
 	EndProjectSection
 EndProject
