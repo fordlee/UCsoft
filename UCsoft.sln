@@ -12,7 +12,25 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UCsoft.Doc", "UCsoft.Doc", 
 		WE-Markdown.css = WE-Markdown.css
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UCsoft.Web", "UCsoft.Web\UCsoft.Web.csproj", "{6F6520A7-394C-469C-AC5B-45FA459B8EDC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UCsoft.Web.Tests", "UCsoft.Web.Tests\UCsoft.Web.Tests.csproj", "{B20119E2-8239-491D-ADD0-46B0BE788BC0}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6F6520A7-394C-469C-AC5B-45FA459B8EDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F6520A7-394C-469C-AC5B-45FA459B8EDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F6520A7-394C-469C-AC5B-45FA459B8EDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F6520A7-394C-469C-AC5B-45FA459B8EDC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B20119E2-8239-491D-ADD0-46B0BE788BC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B20119E2-8239-491D-ADD0-46B0BE788BC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B20119E2-8239-491D-ADD0-46B0BE788BC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B20119E2-8239-491D-ADD0-46B0BE788BC0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
