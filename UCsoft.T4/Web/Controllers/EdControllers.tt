@@ -1,0 +1,192 @@
+﻿<#@ template debug="True" hostspecific="True" language="C#" #>
+<#@ include file="../../MultipleOutputHelper.ttinclude" #>
+<#@ Assembly Name="$(TargetDir)NLite.dll" #>
+<#@ Assembly Name="$(TargetDir)ELinq.dll" #>
+<#@ assembly Name="System.Data" #>
+<#@ import Namespace="NLite.Data" #>
+<#@ import Namespace="NLite.Data.CodeGeneration" #>
+<#@ output extension=".cs" #>
+<#
+	var @contextNamespace = "Ed.DBContext";
+	var @ModelNamespace = "Ed.Model";
+	var @ServiceNamespace = "Ed.Service";
+	var @controllerNamespace="Ed.Web";
+	var @Date=System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+	var connectionStringName = "EdSqlServer";
+	var dbType=GetAppSettings("databaseType");
+	switch(dbType){
+		    case "SqlServer":
+	        connectionStringName = "EdSqlServer";
+			break;
+			case "MySql":
+				 connectionStringName = "EdMySql";
+			break;
+			default:
+			 connectionStringName = "EdSqlServer";
+			break;
+    }
+	//var dbContextName = Host.TemplateFile.Split('\\')[Host.TemplateFile.Split('\\').Length - 1].TrimEnd('.', 't');
+	var dbContextName ="EdDBContext";
+	var connectionStringSetting = GetConnectionStringSettings(connectionStringName);
+	var connectionString = connectionStringSetting.ConnectionString;
+	var dbProviderName = connectionStringSetting.ProviderName;
+	var dbConfiguration = DbConfiguration.Configure(connectionString, dbProviderName);
+	var databaseSchema = dbConfiguration.Schema;
+	var manager = Manager.Create(Host, GenerationEnvironment);
+	//manager.StartHeader();
+#>
+
+
+<#foreach (var tb in databaseSchema.Tables){#>
+<#
+ //开始Controller===================================================================================
+var controllerFilename= NamingConversion.Default.ClassName( tb.TableName).TrimStart('T')+ "Controller";
+var serviceFilename= "I"+NamingConversion.Default.ClassName( tb.TableName).TrimStart('T')+ "Service";
+var serviceImplFilename= NamingConversion.Default.ClassName( tb.TableName).TrimStart('T')+ "ServiceImpl";
+var serviceTypename= "I"+NamingConversion.Default.ClassName( tb.TableName).TrimStart('T')+ "Service";
+var servicePerportyname= NamingConversion.Default.ClassName( tb.TableName).TrimStart('T')+ "Service";
+var serviceModelName=NamingConversion.Default.ClassName( tb.TableName);
+var serviceListName=NamingConversion.Default.QueryableName( tb.TableName);
+var EdIndexViewFilename=  "List";
+var EdEditViewFilename=  "Edit";
+var EdShowViewFilename= "Show";
+manager.StartNewFile(controllerFilename+ ".cs");
+#>
+
+// ReSharper disable All 禁止ReSharper显示警告
+using Ed.Common;
+using Ed.Web.Filters;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using Ed.Service;
+using Ed.Entity;
+
+namespace <#= @controllerNamespace #>
+{
+public  class <#=controllerFilename#>: Controller
+    {
+	
+	#region  依赖注入 <#=@Date#> By 唐有炜
+	public <#=serviceTypename#>  <#=servicePerportyname#>{set;get;}
+	#endregion
+
+     #region 页面展示  2014-10-11 10:21:24 By 唐有炜
+
+        #region 首页
+
+        // GET: URL
+        [UserAuthorize]
+        [HttpGet]
+        public ActionResult List()
+        {
+            return View("<#=EdIndexViewFilename#>");
+        }
+
+        #endregion
+
+        #region 添加、修改页面  
+
+        ////GET: URL
+		////actionType (Add,Edit)
+        [UserAuthorize]
+        [HttpGet]
+        public ActionResult Edit(string actionType, int? id )
+        {
+		    //actionType
+            ViewBag.ActionType = actionType;
+
+            //修改
+            if (actionType == EdEnums.ActionEnum.Edit.ToString())
+            {
+			   if (null == id)
+                {
+                    ViewData["Msg"] = "参数非法（id不能为空）";
+                    return View("_Error");
+                }
+                var model = <#=servicePerportyname#>.Get<#=serviceModelName.TrimStart('T')#>(temp=> temp.Id == id);
+                return View("<#=EdEditViewFilename#>", model);
+            }
+            //添加
+            else if (actionType == EdEnums.ActionEnum.Add.ToString())
+            {
+		      	var  <#=serviceModelName.TrimStart('T').ToLower()#>=new <#=serviceModelName#>();
+                return View("<#=EdEditViewFilename#>",<#=serviceModelName.TrimStart('T').ToLower()#> );
+            }
+            else
+            {
+		        ViewData["Msg"] = "参数非法（actipnType不能为空）";
+                 return View("_Error");
+            }
+        }
+
+        #endregion
+
+        //#region   查看页面  
+        ////GET: URL
+        ////[UserAuthorize]
+        //[HttpGet]
+        //public ActionResult Show(int? id)
+        //{
+		//if (null== id)
+        //   {
+		//     ViewData["Msg"] = "参数非法！";
+        //       return View("_Error");
+        //   }
+        //var model = SysDepartmentService.GetSysDepartment(d => d.Id == id);
+        //return View("<#=EdShowViewFilename#>", model);
+        //}
+        //#endregion
+
+        #endregion
+
+	}
+}
+<#
+  }
+#>
+
+<#
+ manager.EndBlock();
+ //结束ServiceImpl===================================================================================
+#>
+
+<#
+
+foreach (var tb in databaseSchema.Views){
+	var serviceFilename= "I"+NamingConversion.Default.ClassName( tb.TableName)+ "Dao";
+var serviceModelName=NamingConversion.Default.ClassName( tb.TableName);
+var serviceListName=NamingConversion.Default.QueryableName( tb.TableName);
+	 manager.StartNewFile(NamingConversion.Default.ClassName(tb.TableName) + ".cs");
+	 //开始视图
+	 #>
+
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using NLite.Data;
+using Ed.DBContext;
+using Ed.Entity;
+
+namespace <#= @ServiceNamespace #>
+{
+public  interface <#=serviceFilename#>:IViewDao<<#=serviceModelName#>>
+    {
+
+	}
+}
+<# 
+} 
+ manager.EndBlock();
+#>
+
+
+
+<#
+ //执行===================================================================================
+ manager.Process(true);
+#>

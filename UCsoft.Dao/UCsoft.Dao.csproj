@@ -30,8 +30,21 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ELinq">
+      <HintPath>..\packages\ELinq.0.6.1\lib\net40\ELinq.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NLite">
+      <HintPath>..\packages\NLite.0.9.5.7\lib\net40\NLite.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Linq.Dynamic">
+      <HintPath>..\packages\System.Linq.Dynamic.1.0.2\lib\net40\System.Linq.Dynamic.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -39,7 +52,71 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Impl\TCusBaseDaoImpl.cs" />
+    <Compile Include="Impl\TCusConDaoImpl.cs" />
+    <Compile Include="Impl\TCusLogDaoImpl.cs" />
+    <Compile Include="Impl\TFunAppCompanyDaoImpl.cs" />
+    <Compile Include="Impl\TFunAppDaoImpl.cs" />
+    <Compile Include="Impl\TFunExpandDaoImpl.cs" />
+    <Compile Include="Impl\TFunFilterDaoImpl.cs" />
+    <Compile Include="Impl\TFunMyappCompanyDaoImpl.cs" />
+    <Compile Include="Impl\TFunMyappDaoImpl.cs" />
+    <Compile Include="Impl\TFunOperatingDaoImpl.cs" />
+    <Compile Include="Impl\TFunTagDaoImpl.cs" />
+    <Compile Include="Impl\TSysCompanyDaoImpl.cs" />
+    <Compile Include="Impl\TSysDepartmentDaoImpl.cs" />
+    <Compile Include="Impl\TSysLogDaoImpl.cs" />
+    <Compile Include="Impl\TSysPowerDaoImpl.cs" />
+    <Compile Include="Impl\TSysRoleDaoImpl.cs" />
+    <Compile Include="Impl\TSysUserDaoImpl.cs" />
+    <Compile Include="Impl\VAppCompanyDaoImpl.cs" />
+    <Compile Include="Impl\VCompanyUserDaoImpl.cs" />
+    <Compile Include="Impl\VCustomerContactDaoImpl.cs" />
+    <Compile Include="Impl\VMyappCompanyDaoImpl.cs" />
+    <Compile Include="Impl\VSysDepartmentDaoImpl.cs" />
+    <Compile Include="ITableDao.cs" />
+    <Compile Include="ITCusBaseDao.cs" />
+    <Compile Include="ITCusConDao.cs" />
+    <Compile Include="ITCusLogDao.cs" />
+    <Compile Include="ITFunAppCompanyDao.cs" />
+    <Compile Include="ITFunAppDao.cs" />
+    <Compile Include="ITFunExpandDao.cs" />
+    <Compile Include="ITFunFilterDao.cs" />
+    <Compile Include="ITFunMyappCompanyDao.cs" />
+    <Compile Include="ITFunMyappDao.cs" />
+    <Compile Include="ITFunOperatingDao.cs" />
+    <Compile Include="ITFunTagDao.cs" />
+    <Compile Include="ITSysCompanyDao.cs" />
+    <Compile Include="ITSysDepartmentDao.cs" />
+    <Compile Include="ITSysLogDao.cs" />
+    <Compile Include="ITSysPowerDao.cs" />
+    <Compile Include="ITSysRoleDao.cs" />
+    <Compile Include="ITSysUserDao.cs" />
+    <Compile Include="IVAppCompanyDao.cs" />
+    <Compile Include="IVCompanyUserDao.cs" />
+    <Compile Include="IVCustomerContactDao.cs" />
+    <Compile Include="IViewDao.cs" />
+    <Compile Include="IVMyappCompanyDao.cs" />
+    <Compile Include="IVSysDepartmentDao.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\UCsoft.Common\UCsoft.Common.csproj">
+      <Project>{ea759968-538a-4ef7-a207-4383cde17c6d}</Project>
+      <Name>UCsoft.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UCsoft.Data\UCsoft.Data.csproj">
+      <Project>{d30bf1e8-c5a6-49e9-b756-20a561d9f76f}</Project>
+      <Name>UCsoft.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UCsoft.Entity\UCsoft.Entity.csproj">
+      <Project>{45e160a7-334b-4473-ad23-4753a456b6e8}</Project>
+      <Name>UCsoft.Entity</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -3,7 +3,7 @@
 <objects xmlns="http://www.springframework.net" xmlns:db="http://www.springframework.net/database">
   <!--loginController-->
   <object id="loginController" type="UCsoft.Web.Areas.Account.Controllers.LoginController, UCsoft.Web" singleton="false">
-    <!--<property name="SysUserService" ref="sysUserService" />
-    <property name="AccountService" ref="accountService" />-->
+   <property name="TSysUserService" ref="tSysUserService" />
+   <property name="AccountService" ref="accountService" />
   </object>
 </objects>

@@ -1,3 +1,102 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <objects xmlns="http://www.springframework.net" xmlns:db="http://www.springframework.net/database">
+  <!--tCusBaseService-->
+  <object id="tCusBaseService" type="UCsoft.Service.Impl.TCusBaseServiceImpl, UCsoft.Service" singleton="false">
+    <property name="TCusBaseDao" ref="tCusBaseDao" />
+  </object>
+  <!--tCusConService-->
+  <object id="tCusConService" type="UCsoft.Service.Impl.TCusConServiceImpl, UCsoft.Service" singleton="false">
+    <property name="TCusConDao" ref="tCusConDao" />
+  </object>
+  <!--tCusLogService-->
+  <object id="tCusLogService" type="UCsoft.Service.Impl.TCusLogServiceImpl, UCsoft.Service" singleton="false">
+    <property name="TCusLogDao" ref="tCusLogDao" />
+  </object>
+  <!--tFunAppService-->
+  <object id="tFunAppService" type="UCsoft.Service.Impl.TFunAppServiceImpl, UCsoft.Service" singleton="false">
+    <property name="TFunAppDao" ref="tFunAppDao" />
+  </object>
+  <!--tFunAppCompanyService-->
+  <object id="tFunAppCompanyService" type="UCsoft.Service.Impl.TFunAppCompanyServiceImpl, UCsoft.Service" singleton="false">
+    <property name="TFunAppCompanyDao" ref="tFunAppCompanyDao" />
+  </object>
+  <!--tFunExpandService-->
+  <object id="tFunExpandService" type="UCsoft.Service.Impl.TFunExpandServiceImpl, UCsoft.Service" singleton="false">
+    <property name="TFunExpandDao" ref="tFunExpandDao" />
+  </object>
+  <!--tFunFilterService-->
+  <object id="tFunFilterService" type="UCsoft.Service.Impl.TFunFilterServiceImpl, UCsoft.Service" singleton="false">
+    <property name="TFunFilterDao" ref="tFunFilterDao" />
+  </object>
+  <!--tFunMyappService-->
+  <object id="tFunMyappService" type="UCsoft.Service.Impl.TFunMyappServiceImpl, UCsoft.Service" singleton="false">
+    <property name="TFunMyappDao" ref="tFunMyappDao" />
+  </object>
+  <!--tFunMyappCompanyService-->
+  <object id="tFunMyappCompanyService" type="UCsoft.Service.Impl.TFunMyappCompanyServiceImpl, UCsoft.Service" singleton="false">
+    <property name="TFunMyappCompanyDao" ref="tFunMyappCompanyDao" />
+  </object>
+  <!--tFunOperatingService-->
+  <object id="tFunOperatingService" type="UCsoft.Service.Impl.TFunOperatingServiceImpl, UCsoft.Service" singleton="false">
+    <property name="TFunOperatingDao" ref="tFunOperatingDao" />
+  </object>
+  <!--tFunTagService-->
+  <object id="tFunTagService" type="UCsoft.Service.Impl.TFunTagServiceImpl, UCsoft.Service" singleton="false">
+    <property name="TFunTagDao" ref="tFunTagDao" />
+  </object>
+  <!--tSysCompanyService-->
+  <object id="tSysCompanyService" type="UCsoft.Service.Impl.TSysCompanyServiceImpl, UCsoft.Service" singleton="false">
+    <property name="TSysCompanyDao" ref="tSysCompanyDao" />
+  </object>
+  <!--tSysDepartmentService-->
+  <object id="tSysDepartmentService" type="UCsoft.Service.Impl.TSysDepartmentServiceImpl, UCsoft.Service" singleton="false">
+    <property name="TSysDepartmentDao" ref="tSysDepartmentDao" />
+  </object>
+  <!--tSysLogService-->
+  <object id="tSysLogService" type="UCsoft.Service.Impl.TSysLogServiceImpl, UCsoft.Service" singleton="false">
+    <property name="TSysLogDao" ref="tSysLogDao" />
+  </object>
+  <!--tSysPowerService-->
+  <object id="tSysPowerService" type="UCsoft.Service.Impl.TSysPowerServiceImpl, UCsoft.Service" singleton="false">
+    <property name="TSysPowerDao" ref="tSysPowerDao" />
+  </object>
+  <!--tSysRoleService-->
+  <object id="tSysRoleService" type="UCsoft.Service.Impl.TSysRoleServiceImpl, UCsoft.Service" singleton="false">
+    <property name="TSysRoleDao" ref="tSysRoleDao" />
+  </object>
+  <!--tSysUserService-->
+  <object id="tSysUserService" type="UCsoft.Service.Impl.TSysUserServiceImpl, UCsoft.Service" singleton="false">
+    <property name="TSysUserDao" ref="tSysUserDao" />
+  </object>
+  <!--vAppCompanyService-->
+  <object id="vAppCompanyService" type="UCsoft.Service.Impl.VAppCompanyServiceImpl, UCsoft.Service" singleton="false">
+    <property name="VAppCompanyDao" ref="vAppCompanyDao" />
+  </object>
+  <!--vCompanyUserService-->
+  <object id="vCompanyUserService" type="UCsoft.Service.Impl.VCompanyUserServiceImpl, UCsoft.Service" singleton="false">
+    <property name="VCompanyUserDao" ref="vCompanyUserDao" />
+  </object>
+  <!--vCustomerContactService-->
+  <object id="vCustomerContactService" type="UCsoft.Service.Impl.VCustomerContactServiceImpl, UCsoft.Service" singleton="false">
+    <property name="VCustomerContactDao" ref="vCustomerContactDao" />
+  </object>
+  <!--vMyappCompanyService-->
+  <object id="vMyappCompanyService" type="UCsoft.Service.Impl.VMyappCompanyServiceImpl, UCsoft.Service" singleton="false">
+    <property name="VMyappCompanyDao" ref="vMyappCompanyDao" />
+  </object>
+  <!--vSysDepartmentService-->
+  <object id="vSysDepartmentService" type="UCsoft.Service.Impl.VSysDepartmentServiceImpl, UCsoft.Service" singleton="false">
+    <property name="VSysDepartmentDao" ref="vSysDepartmentDao" />
+  </object>
+  
+  
+  <!--手写的Service-->
+  <!--accountService-->
+  <object id="accountService" type="UCsoft.Service.Impl.AccountServiceImpl, UCsoft.Service" singleton="false">
+    <property name="TSysUserDao" ref="tSysUserDao" />
+    <property name="TSysRoleDao" ref="tSysRoleDao" />
+    <property name="TSysLogDao" ref="tSysLogDao" />
+  </object>
+  <!--accountService-->
+  <!--手写的Service-->
 </objects>

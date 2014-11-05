@@ -46,8 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DBContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UCDbContext.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

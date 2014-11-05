@@ -303,6 +303,10 @@
       <Project>{45e160a7-334b-4473-ad23-4753a456b6e8}</Project>
       <Name>UCsoft.Entity</Name>
     </ProjectReference>
+    <ProjectReference Include="..\UCsoft.Service\UCsoft.Service.csproj">
+      <Project>{46d66ffd-2ee6-488c-8f9a-7507bf108014}</Project>
+      <Name>UCsoft.Service</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="log4net.config">

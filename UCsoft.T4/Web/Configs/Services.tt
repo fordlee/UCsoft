@@ -1,0 +1,67 @@
+﻿<#@ template debug="True" hostspecific="True" language="C#" #>
+<#@ Include File="../../MultipleOutputHelper.ttinclude" #>
+<#@ Assembly Name="$(TargetDir)NLite.dll" #>
+<#@ Assembly Name="$(TargetDir)ELinq.dll" #>
+<#@ Assembly Name="System.Data" #>
+<#@ Import Namespace="NLite.Data" #>
+<#@ Import Namespace="NLite.Data.CodeGeneration" #>
+<#@ output extension=".xml" #>
+<#
+	var @contextNamespace = "UCsoft.Data";
+	var @ModelNamespace = "UCsoft.Entity";
+	var @Date=System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
+	
+	var connectionStringName = "SqlServer";
+	var dbType=GetAppSettings("databaseType");
+	switch(dbType){
+		    case "SqlServer":
+	        connectionStringName = "SqlServer";
+			break;
+			case "MySql":
+	        connectionStringName = "MySql";
+			break;
+			case "Oracle":
+	        connectionStringName = "Oracle";
+			break;
+			case "Access":
+	        connectionStringName = "Access";
+			break;
+			case "SqlCe":
+	        connectionStringName = "SqlCe";
+			break;
+			case "SqLite":
+	        connectionStringName = "SqLite";
+			break;
+			default:
+			 connectionStringName = "SqlServer";
+			break;
+    }
+
+
+
+
+	var dbContextName =Path.GetFileNameWithoutExtension(Host.TemplateFile);
+	var connectionStringSetting = GetConnectionStringSettings(connectionStringName);
+	var connectionString = connectionStringSetting.ConnectionString;
+	var dbProviderName = connectionStringSetting.ProviderName;
+	var dbConfiguration = DbConfiguration.Configure(connectionString, dbProviderName);
+	var databaseSchema = dbConfiguration.Schema;
+	//var manager = Manager.Create(Host, GenerationEnvironment);
+	//manager.StartHeader();
+#>
+<?xml version="1.0" encoding="utf-8"?>
+<objects xmlns="http://www.springframework.net" xmlns:db="http://www.springframework.net/database">
+<#foreach (var tb in databaseSchema.Tables.Union(databaseSchema.Views)){#>
+<#
+var serviceFilename= NamingConversion.Default.ClassName( tb.TableName)+ "ServiceImpl";
+var modelName=NamingConversion.Default.ClassName( tb.TableName);
+var tempModelName=NamingConversion.Default.ClassName( tb.TableName);
+tempModelName=tempModelName[0].ToString().ToLower() + tempModelName.Substring(1);
+#>
+  <!--<#=tempModelName#>Service-->
+  <object id="<#=tempModelName#>Service" type="UCsoft.Service.Impl.<#=serviceFilename#>, UCsoft.Service" singleton="false">
+    <property name="<#=modelName+"Dao"#>" ref="<#=tempModelName#>Dao" />
+  </object>
+<#}#>
+</objects>

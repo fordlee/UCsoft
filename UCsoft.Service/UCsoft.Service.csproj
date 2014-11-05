@@ -30,8 +30,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NLite">
+      <HintPath>..\packages\NLite.0.9.5.7\lib\net40\NLite.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -39,7 +43,75 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IAccountService.cs" />
+    <Compile Include="Impl\AccountServiceImpl.cs" />
+    <Compile Include="Impl\TCusBaseServiceImpl.cs" />
+    <Compile Include="Impl\TCusConServiceImpl.cs" />
+    <Compile Include="Impl\TCusLogServiceImpl.cs" />
+    <Compile Include="Impl\TFunAppCompanyServiceImpl.cs" />
+    <Compile Include="Impl\TFunAppServiceImpl.cs" />
+    <Compile Include="Impl\TFunExpandServiceImpl.cs" />
+    <Compile Include="Impl\TFunFilterServiceImpl.cs" />
+    <Compile Include="Impl\TFunMyappCompanyServiceImpl.cs" />
+    <Compile Include="Impl\TFunMyappServiceImpl.cs" />
+    <Compile Include="Impl\TFunOperatingServiceImpl.cs" />
+    <Compile Include="Impl\TFunTagServiceImpl.cs" />
+    <Compile Include="Impl\TSysCompanyServiceImpl.cs" />
+    <Compile Include="Impl\TSysDepartmentServiceImpl.cs" />
+    <Compile Include="Impl\TSysLogServiceImpl.cs" />
+    <Compile Include="Impl\TSysPowerServiceImpl.cs" />
+    <Compile Include="Impl\TSysRoleServiceImpl.cs" />
+    <Compile Include="Impl\TSysUserServiceImpl.cs" />
+    <Compile Include="Impl\VAppCompanyServiceImpl.cs" />
+    <Compile Include="Impl\VCompanyUserServiceImpl.cs" />
+    <Compile Include="Impl\VCustomerContactServiceImpl.cs" />
+    <Compile Include="Impl\VMyappCompanyServiceImpl.cs" />
+    <Compile Include="Impl\VSysDepartmentServiceImpl.cs" />
+    <Compile Include="ITCusBaseService.cs" />
+    <Compile Include="ITCusConService.cs" />
+    <Compile Include="ITCusLogService.cs" />
+    <Compile Include="ITFunAppCompanyService.cs" />
+    <Compile Include="ITFunAppService.cs" />
+    <Compile Include="ITFunExpandService.cs" />
+    <Compile Include="ITFunFilterService.cs" />
+    <Compile Include="ITFunMyappCompanyService.cs" />
+    <Compile Include="ITFunMyappService.cs" />
+    <Compile Include="ITFunOperatingService.cs" />
+    <Compile Include="ITFunTagService.cs" />
+    <Compile Include="ITSysCompanyService.cs" />
+    <Compile Include="ITSysDepartmentService.cs" />
+    <Compile Include="ITSysLogService.cs" />
+    <Compile Include="ITSysPowerService.cs" />
+    <Compile Include="ITSysRoleService.cs" />
+    <Compile Include="ITSysUserService.cs" />
+    <Compile Include="IVAppCompanyService.cs" />
+    <Compile Include="IVCompanyUserService.cs" />
+    <Compile Include="IVCustomerContactService.cs" />
+    <Compile Include="IVMyappCompanyService.cs" />
+    <Compile Include="IVSysDepartmentService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\UCsoft.Common\UCsoft.Common.csproj">
+      <Project>{ea759968-538a-4ef7-a207-4383cde17c6d}</Project>
+      <Name>UCsoft.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UCsoft.Dao\UCsoft.Dao.csproj">
+      <Project>{a82d0328-3bf9-4798-af81-1b0510df316a}</Project>
+      <Name>UCsoft.Dao</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UCsoft.Data\UCsoft.Data.csproj">
+      <Project>{d30bf1e8-c5a6-49e9-b756-20a561d9f76f}</Project>
+      <Name>UCsoft.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UCsoft.Entity\UCsoft.Entity.csproj">
+      <Project>{45e160a7-334b-4473-ad23-4753a456b6e8}</Project>
+      <Name>UCsoft.Entity</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

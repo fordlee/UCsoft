@@ -1,14 +1,26 @@
 ﻿
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
+/*
+ * ========================================================================
+ * Copyright(c) 2013-2014 郑州优创科技有限公司, All Rights Reserved.
+ * ========================================================================
+ *  
+ * 【Ed数据库操作上下文】
+ *  
+ *  
+ * 作者：唐有炜   时间：2014-11-05 19:00:25
+ * 文件名：@dbContextName
+ * 版本：V1.0.0
+ * 
+ * 修改者：唐有炜           时间：2014-11-05 19:00:25            
+ * 修改说明：修改说明
+ * ========================================================================
+*/
 using NLite.Data;
 using UCsoft.Entity;
 using NLite.Reflection;
 namespace UCsoft.Data
 {
-	public partial class Entity:DbContext
+	public partial class UCDbContext:DbContext
 	{
 	    #region 初始化上下文
 		//连接字符串名称：基于Config文件中连接字符串的配置
@@ -17,16 +29,16 @@ namespace UCsoft.Data
         //构造dbConfiguration 对象
         static DbConfiguration dbConfiguration;
 
-		static Entity()
+		static UCDbContext()
 		{
 			 dbConfiguration = DbConfiguration
                   .Configure(connectionStringName)
                   .SetSqlLogger(() =>SqlLog.Debug)
-				  .AddFromAssemblyOf<Entity>(t=>t.HasAttribute<TableAttribute>(false))
+				  .AddFromAssemblyOf<UCDbContext>(t=>t.HasAttribute<TableAttribute>(false))
 				  ;
 		}
 
-		public Entity():base(dbConfiguration){}
+		public UCDbContext():base(dbConfiguration){}
 		#endregion
 
 		#region 数据集关联
@@ -54,11 +66,5 @@ namespace UCsoft.Data
 		public IDbSet<VSysDepartment> VSysDepartments { get; private set; }
         #endregion
 	}
+	}
 	
-
-  
-}
-
-
-
-

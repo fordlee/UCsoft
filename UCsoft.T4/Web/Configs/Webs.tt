@@ -1,0 +1,51 @@
+﻿  <#@ template debug="True" hostspecific="True" language="C#" #>
+<#@ Include File="../../MultipleOutputHelper.ttinclude" #>
+<#@ Assembly Name="$(TargetDir)NLite.dll" #>
+<#@ Assembly Name="$(TargetDir)ELinq.dll" #>
+<#@ Assembly Name="System.Data" #>
+<#@ Import Namespace="NLite.Data" #>
+<#@ Import Namespace="NLite.Data.CodeGeneration" #>
+<#@ output extension=".xml" #>
+<#
+	var @contextNamespace = "Ed.DBContext";
+	var @ModelNamespace = "Ed.Entity";
+	var @Date=System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
+	var connectionStringName = "EdSqlServer";
+	var dbType=GetAppSettings("databaseType");
+	switch(dbType){
+		    case "SqlServer":
+	        connectionStringName = "EdSqlServer";
+			break;
+			default:
+			 connectionStringName = "EdSqlServer";
+			break;
+    }
+	//var dbContextName = Host.TemplateFile.Split('\\')[Host.TemplateFile.Split('\\').Length - 1].TrimEnd('.', 't');
+	var dbContextName =Path.GetFileNameWithoutExtension(Host.TemplateFile);
+	var connectionStringSetting = GetConnectionStringSettings(connectionStringName);
+	var connectionString = connectionStringSetting.ConnectionString;
+	var dbProviderName = connectionStringSetting.ProviderName;
+	var dbConfiguration = DbConfiguration.Configure(connectionString, dbProviderName);
+	var databaseSchema = dbConfiguration.Schema;
+	//var manager = Manager.Create(Host, GenerationEnvironment);
+	//manager.StartHeader();
+#>
+<?xml version="1.0" encoding="utf-8"?>
+<objects xmlns="http://www.springframework.net" xmlns:db="http://www.springframework.net/database">
+<#foreach (var tb in databaseSchema.Tables.Union(databaseSchema.Views)){#>
+<#
+var controllerFilename= NamingConversion.Default.ClassName( tb.TableName).TrimStart('T')+ "Controller";
+var modelName=NamingConversion.Default.ClassName( tb.TableName);
+var tempModelName=NamingConversion.Default.ClassName( tb.TableName).TrimStart('T');
+tempModelName=tempModelName[0].ToString().ToLower() + tempModelName.Substring(1);
+#>
+  <!--<#=tempModelName#>Controller-->
+  <object id="<#=tempModelName#>Controller" type="Ed.Web.<#=controllerFilename#>, Ed.Web" singleton="false">
+    <property name="<#=modelName.TrimStart('T')+"Service"#>" ref="<#=tempModelName#>Service" />
+  </object>
+
+<#}#>
+</objects>
+  
+  

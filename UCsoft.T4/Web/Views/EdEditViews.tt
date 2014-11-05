@@ -1,0 +1,282 @@
+﻿<#@ template debug="True" hostspecific="True" language="C#" #>
+<#@ include file="../../MultipleOutputHelper.ttinclude" #>
+<#@ Assembly Name="$(TargetDir)NLite.dll" #>
+<#@ Assembly Name="$(TargetDir)ELinq.dll" #>
+<#@ assembly Name="System.Data" #>
+<#@ import Namespace="NLite.Data" #>
+<#@ import Namespace="NLite.Data.CodeGeneration" #>
+<#@ output extension=".cshtml" #>
+<#
+    var @basePath=System.IO.Path.GetDirectoryName(Host.TemplateFile);
+	var @contextNamespace = "Ed.DBContext";
+	var @ModelNamespace = "Ed.Model";
+	var @ServiceNamespace = "Ed.Service";
+	var @Date=System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+	var connectionStringName = "EdSqlServer";
+	var dbType=GetAppSettings("databaseType");
+	switch(dbType){
+		    case "SqlServer":
+	        connectionStringName = "EdSqlServer";
+			break;
+			case "MySql":
+				 connectionStringName = "EdMySql";
+			break;
+			default:
+			 connectionStringName = "EdSqlServer";
+			break;
+    }
+	//var dbContextName = Host.TemplateFile.Split('\\')[Host.TemplateFile.Split('\\').Length - 1].TrimEnd('.', 't');
+	var dbContextName ="EdDBContext";
+	var connectionStringSetting = GetConnectionStringSettings(connectionStringName);
+	var connectionString = connectionStringSetting.ConnectionString;
+	var dbProviderName = connectionStringSetting.ProviderName;
+	var dbConfiguration = DbConfiguration.Configure(connectionString, dbProviderName);
+	var databaseSchema = dbConfiguration.Schema;
+	var manager = Manager.Create(Host, GenerationEnvironment);
+	//manager.StartHeader();
+#>
+
+
+<#foreach (var tb in databaseSchema.Tables){#>
+<#
+ //开始ServiceImpl===================================================================================
+var modelName=NamingConversion.Default.ClassName( tb.TableName);
+var listName=NamingConversion.Default.QueryableName( tb.TableName);
+//表单id
+var formId=modelName.TrimStart('T').ToLower()+"_form";
+
+var newPath=System.IO.Path.Combine(@basePath,modelName.TrimStart('T')).ToString().Replace("\\","\\\\");
+if(!System.IO.Directory.Exists(newPath)){
+System.IO.Directory.CreateDirectory(newPath);
+}
+var EdIndexViewFilename= @basePath+"\\"+modelName.TrimStart('T')+ "\\"+ "Edit";
+manager.StartNewFile(EdIndexViewFilename+".cshtml");
+#>
+@using System.Web.Optimization
+@using Ed.Web.Helpers
+@model Ed.Entity.<#=modelName#>
+@{
+    Layout = null;
+    //页面类型
+    var actionType = ViewBag.ActionType;
+}
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+     <title>添加/修改</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" conte=conte nt="IE=Edge" />
+ 
+    @Styles.Render("~/Themes/default/css/cp.globle.min1.css")
+    @Scripts.Render("~/Themes/default/js/cp.globle.min1.js")
+
+    <!--my97DatePicker-->
+    <script src="/Themes/default/lib/my97DatePicker/WdatePicker.js" type="text/javascript"></script>
+    <!--省市数据-->
+    <script src="/Themes/default/base/js/city.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        //=============================================================
+        //去除顶层加载中
+        $(document).ready(function () {
+            //去除加载中
+            if (undefined != top.dialog.list["show_loading"]) {
+                top.dialog.list["show_loading"].close().remove();
+                //showTopMsg("页面加载成功！", "温馨提示", "Success");
+            }
+        });
+        //=====================================================================
+    </script>
+	
+    <script type="text/javascript">
+        $(function () {
+            validate_form();
+        });
+
+
+            //表单验证
+        function validate_form() {
+            //表单验证
+            $("#<#=formId#>").validate({
+                 invalidHandler: function (e, validator) {
+                        var msg = "有 " + validator.numberOfInvalids() + " 项填写有误，请检查！";
+                        $("#msgprint").html(msg).show().focus();
+                        setTimeout(function () {
+                            $("#msgprint").fadeOut(500);
+                            //如果动画结束则删除节点
+                            if (!$("#msgprint").is(":animated")) {
+                                $("#msgprint").hide();
+                            }
+                        }, 1000);
+                    },
+                    focusInvalid: false,
+                    errorPlacement: function (error, element) {
+                        var errorMsg = error[0].innerHTML;
+                        var elementName = element[0].name;
+                         $("#" + elementName).formtip(errorMsg);
+                        $("#" + elementName).attr("placeholder", errorMsg);
+                    },
+                    success: function (element) {
+                        var elem = $(element)[0].htmlFor;
+                        $("#" + elem).poshytip('disable');
+                        $("#" + elem).poshytip('destroy');
+                        $("#" + elem).removeClass("error").addClass("success");
+                    }
+            });
+        }
+
+
+
+
+
+
+
+
+
+                //表单验证方法，供父窗口调用
+        function form_valid() {
+            if ($("#<#=formId#>").valid()) {
+                return true;
+            } else {
+                return false;
+            }
+
+        }
+
+    </script>
+
+
+
+
+</head>
+<body>
+    <form id="<#=formId#>" name="<#=formId#>">
+         <!--id-->
+          <#foreach (var col in tb.PrimaryKeys){#>	
+		      @Html.HiddenFor(model => model.<#= NamingConversion.Default.PropertyName(col.ColumnName) #>)
+        <#}#> 
+       
+           <!--表单错误提示区-->
+        <div tabindex="-1" id="msgprint" class="warning" style="position: fixed; width: 90%; display: none;">您的表单包含错误，请检查！</div>
+        <div class="tab-content">
+            <ul class="nav nav-tabs" id="formTab">
+                <li class="active"><a href="#tab-info" data-toggle="tab">Tab1</a></li>
+                 </ul>
+            <div class="tab-pane active" id="tab-info">
+              <div style="height:15px;"></div>
+
+			   <table width="800" border="0" cellspacing="0" cellpadding="0" class="commontable shortSelect">
+			    <tbody>
+
+
+
+		     <#var i=0;#>
+			 <#foreach (var col in tb.Columns){#>
+			 <#
+			 //数据类型
+			 var dataType=NamingConversion.Default.DataType(col); #>
+			 <#if(i%2==0){#>
+				   <tr>
+                	<th><span class="must">*</span><#= NamingConversion.Default.PropertyName(col.ColumnName) #>：</th>
+                    <td>
+					
+			              <#//日期类型#>
+						 <#if(dataType=="DateTime?"){#>
+							@Html.TextBoxFor(model => model.<#= NamingConversion.Default.PropertyName(col.ColumnName) #>, new { @class = "form-control Wdate required dateISO",  Value = (Html.DateTimeNullPalse(Model.<#= NamingConversion.Default.PropertyName(col.ColumnName) #>)).ToString("yyyy-MM-dd"), onclick = "WdatePicker()",@minlength="10",@maxlength="10",@style = "width: 200px; ",@placeholder="字段提示"})
+							<#//Int32#>
+							<#}else if(dataType=="Int32?"){#>
+								  @Html.TextBoxFor(model => model.<#= NamingConversion.Default.PropertyName(col.ColumnName) #>, new { @class = "form-control number", @style = "width: 200px; ",@placeholder="字段提示"})
+							  <#}else{#>
+							  @Html.TextBoxFor(model => model.<#= NamingConversion.Default.PropertyName(col.ColumnName) #>, new { @class = "form-control", @style = "width: 200px; ",@placeholder="字段提示"})
+							  <#}#>
+	
+                    </td>
+               <#}else{#>    
+				   <th><span class="must">*</span><#= NamingConversion.Default.PropertyName(col.ColumnName) #>：</th>
+                    <td>
+					
+				
+						
+			              <#//日期类型#>
+						 <#if(dataType=="DateTime?"){#>
+							@Html.TextBoxFor(model => model.<#= NamingConversion.Default.PropertyName(col.ColumnName) #>, new { @class = "form-control Wdate required dateISO",  Value = (Html.DateTimeNullPalse(Model.<#= NamingConversion.Default.PropertyName(col.ColumnName) #>)).ToString("yyyy-MM-dd"), onclick = "WdatePicker()",@minlength="10",@maxlength="10",@style = "width: 200px; ",@placeholder="字段提示"})
+							<#//Int32#>
+							<#}else if(dataType=="Int32?"){#>
+							@Html.TextBoxFor(model => model.<#= NamingConversion.Default.PropertyName(col.ColumnName) #>, new { @class = "form-control number", @style = "width: 200px; ",@placeholder="字段提示"})
+							<#}else if(dataType=="Int32"){#>
+							@Html.TextBoxFor(model => model.<#= NamingConversion.Default.PropertyName(col.ColumnName) #>, new { @class = "form-control required number", @style = "width: 200px; ",@placeholder="字段提示"})
+							  <#}else{#>
+							  @Html.TextBoxFor(model => model.<#= NamingConversion.Default.PropertyName(col.ColumnName) #>, new { @class = "form-control", @style = "width: 200px; ",@placeholder="字段提示"})
+							  <#}#>
+	
+					
+
+                    </td>
+
+                </tr>
+				<#}#>
+				  <#
+				  i++;
+				  }#>
+				 </tbody>
+			     </table>
+            </div>
+          
+
+         
+        </div>
+
+    </form>
+
+</body>
+</html>
+
+<#
+  }
+#>
+
+<#
+ manager.EndBlock();
+ //结束ServiceImpl===================================================================================
+#>
+
+<#
+
+foreach (var tb in databaseSchema.Views){
+	var EdIndexViewFilename= "I"+NamingConversion.Default.ClassName( tb.TableName)+ "Dao";
+var modelName=NamingConversion.Default.ClassName( tb.TableName);
+var listName=NamingConversion.Default.QueryableName( tb.TableName);
+	 manager.StartNewFile(NamingConversion.Default.ClassName(tb.TableName) + ".cs");
+	 //开始视图
+	 #>
+
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using NLite.Data;
+using Ed.DBContext;
+using Ed.Entity;
+
+namespace <#= @ServiceNamespace #>
+{
+public  interface <#=EdIndexViewFilename#>:IViewDao<<#=modelName#>>
+    {
+
+	}
+}
+<# 
+} 
+ manager.EndBlock();
+#>
+
+
+
+<#
+ //执行===================================================================================
+ manager.Process(true);
+#>

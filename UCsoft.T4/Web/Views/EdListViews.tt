@@ -1,0 +1,404 @@
+﻿<#@ template debug="True" hostspecific="True" language="C#" #>
+<#@ include file="../../MultipleOutputHelper.ttinclude" #>
+<#@ Assembly Name="$(TargetDir)NLite.dll" #>
+<#@ Assembly Name="$(TargetDir)ELinq.dll" #>
+<#@ assembly Name="System.Data" #>
+<#@ import Namespace="NLite.Data" #>
+<#@ import Namespace="NLite.Data.CodeGeneration" #>
+<#@ output extension=".cshtml" #>
+<#
+    var @basePath=System.IO.Path.GetDirectoryName(Host.TemplateFile);
+	var @contextNamespace = "Ed.DBContext";
+	var @ModelNamespace = "Ed.Model";
+	var @ServiceNamespace = "Ed.Service";
+	var @Date=System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+	var connectionStringName = "EdSqlServer";
+	var dbType=GetAppSettings("databaseType");
+	switch(dbType){
+		    case "SqlServer":
+	        connectionStringName = "EdSqlServer";
+			break;
+			case "MySql":
+				 connectionStringName = "EdMySql";
+			break;
+			default:
+			 connectionStringName = "EdSqlServer";
+			break;
+    }
+	//var dbContextName = Host.TemplateFile.Split('\\')[Host.TemplateFile.Split('\\').Length - 1].TrimEnd('.', 't');
+	var dbContextName ="EdDBContext";
+	var connectionStringSetting = GetConnectionStringSettings(connectionStringName);
+	var connectionString = connectionStringSetting.ConnectionString;
+	var dbProviderName = connectionStringSetting.ProviderName;
+	var dbConfiguration = DbConfiguration.Configure(connectionString, dbProviderName);
+	var databaseSchema = dbConfiguration.Schema;
+	var manager = Manager.Create(Host, GenerationEnvironment);
+	//manager.StartHeader();
+#>
+
+
+<#foreach (var tb in databaseSchema.Tables){#>
+<#
+ //开始ServiceImpl===================================================================================
+var modelName=NamingConversion.Default.ClassName( tb.TableName);
+var listName=NamingConversion.Default.QueryableName( tb.TableName);
+var newPath=System.IO.Path.Combine(@basePath,modelName.TrimStart('T')).ToString().Replace("\\","\\\\");
+
+//表单id
+var formId=modelName.TrimStart('T').ToLower()+"_form";
+//表格id
+var gridId=modelName.TrimStart('T').ToLower()+"_grid";
+//初始化表格函数名
+var initGridFun="Init"+modelName.TrimStart('T')+"Grid";
+//添加函数名
+var addFun=modelName.TrimStart('T').ToLower()+"_add";
+//修改函数名
+var editFun=modelName.TrimStart('T').ToLower()+"_edit";
+//删除函数名
+var deleteFun=modelName.TrimStart('T').ToLower()+"_delete";
+//批量删除函数名
+var multiDeleteFun=modelName.TrimStart('T').ToLower()+"_multi_delete";
+//区域名称
+var areaName="Settings";
+
+if(!System.IO.Directory.Exists(newPath)){
+System.IO.Directory.CreateDirectory(newPath);
+}
+var EdIndexViewFilename= @basePath+"\\"+modelName.TrimStart('T')+ "\\"+ "List";
+manager.StartNewFile(EdIndexViewFilename+".cshtml");
+#>
+@using System.Web.Optimization
+@model dynamic
+@{
+    Layout = null;
+}
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+    <title>雪绒花_首页</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+
+    @Styles.Render("~/Themes/default/css/cp.globle.min6.css")
+    @Scripts.Render("~/Themes/default/js/cp.globle.min6.js")
+    <script type="text/javascript">
+        //全局变量
+        var <#=gridId#>;
+
+        $(function() {
+
+            //初始化表格
+            <#=initGridFun#>();
+        });
+
+
+        function  <#=initGridFun#>() {
+            <#=gridId#> = $("#<#=gridId#>_data").bootgrid({
+                ajax: true,
+                post: function() {
+                     return {
+                         searchType: 2//1 数值 2 搜索条件
+                    };
+                //},
+                url: "/api/<#=modelName.TrimStart('T')+"Api"#>/GetBootGrid<#=listName.TrimStart('T')#>",
+                selection: true,
+                multiSelect: true,
+                rowSelect: false,
+                keepSelection: true,
+                rowCount: [10, 30, 50],
+                templates: {
+                    header: "<div id=\"{{ctx.id}}\" class=\"{{css.header}}\"><div class=\"row\"><div class=\"col-sm-12 actionBar\"><div class=\"btn-group\" style=\"float:left;\"><button class=\"btn btn-default tip\" title=\"添加\" onclick=\"return <#=addFun#>(); \"><span class=\"glyphicon glyphicon-plus\"></span>添加</button><button class=\"btn btn-default tip\" title=\"批量删除\" onclick=\"return <#=multiDeleteFun#>(); \"><span class=\"glyphicon glyphicon glyphicon glyphicon-trash\"></span>批量删除</button></div>" +
+                        "<div class=\"search form-group\"><div class=\"input-group\"><span class=\"icon glyphicon input-group-addon glyphicon-search\"></span> <input type=\"text\" class=\"search-field form-control\" placeholder=\"输入关键字\"></div></div>" +
+                        "<p class=\"{{css.actions}}\"></p></div></div></div>"
+                },
+                labels: {
+                    all: "all", //checkbox全选的值
+                    search: "请输入名称",
+                    loading: "加载中...",
+                    noResults: "对不起，暂无符合条件的记录！",
+                    refresh: "刷新",
+                    infos: "从{{ctx.start}} 到 {{ctx.end}}，共{{ctx.total}} 条记录"
+                },
+                formatters: {
+                    "commands": function(column, row) {
+                        return  "<button type=\"button\"  class=\"btn btn-link btn-sm btn-cmd tip\" onclick=\"return <#=editFun#>(" + row.Id + ");\" title=\"修改【自定义】\"><span class=\"glyphicon glyphicon-pencil\"></span></button>" +
+                            "<button type=\"button\"  class=\"btn btn-link btn-sm btn-cmd tip\" onclick=\"return <#=deleteFun#>(" + row.Id + ");\" title=\"删除【自定义】\"><span class=\"glyphicon glyphicon-remove\"></span></button>";
+                    }
+                }
+            }).on("loaded.rs.jquery.bootgrid", function(e) {
+                //按钮提示
+                $('.tip').tooltip({placement:"bottom"});
+                //按钮气泡
+                $('.pop').popover({ html: true, trigger: "hover" });
+                //showMsg("数据加载完毕！", "Success");
+            });
+        }
+
+
+        function <#=addFun#>() {
+            showTopWindow("<#=modelName.TrimStart('T').ToLower()#>_show_add", "/<#=areaName#>/<#=modelName.TrimStart('T')#>/Edit?actionType=Add", null, 800, 400, function () {
+                var <#=formId#> = $(top.window.frames["frm_<#=modelName.TrimStart('T').ToLower()#>_show_add"].document).find("#<#=formId#>");
+                //console.log(<#=formId#>);
+                var flag = top.window.document.getElementById("frm_<#=modelName.TrimStart('T').ToLower()#>_show_add").contentWindow.form_valid();
+                if (!flag) {
+                    return false;
+                }
+                 var data = $(<#=formId#>).serialize();
+                //console.log((data));
+                $.ajax({
+                    type: "POST",
+                    cache: false,
+                    url: "/api/<#=modelName.TrimStart('T')+"Api"#>/Add<#=modelName.TrimStart('T')#>",
+                    data: data,
+                    dataType: "json",
+                    beforeSend: function() {
+                       showTopDialog("show_add_loding", "<div class='dialog_loading'>添加中，请稍后...</div>", "温馨提示", 400, 95);
+                    },
+                    complete: function() {
+                        //d.close().remove();
+                    },
+                    success: function(result) {
+					    top.dialog.list["show_add_loding"].close().remove();
+                        //toLowerCase报错
+                        //var status = result.Status.toLowerCase();
+                        var status = result.Status;
+                        if (status == true || status == "true" || status == "True") {
+                            //刷新数据
+                            <#=gridId#>.bootgrid("reload");
+                            showMsg("添加成功！", "Success");
+                        } else {
+                            showMsg("系统异常，添加失败！", "Error");
+                        }
+                    },
+                    error: function() {
+					    top.dialog.list["show_edit_loding"].close().remove();
+                        showMsg("网络连接错误！", "Error");
+                    }
+                });
+
+            });
+            //必须有这个，阻止刷新
+            return false;
+        }
+
+        function <#=editFun#>(id) {
+             var url = "/<#=areaName#>/<#=modelName.TrimStart('T')#>/Edit?actionType=Edit&id=" + id;
+            //console.log(id);
+            showTopWindow("<#=modelName.TrimStart('T').ToLower()#>_show_edit", "修改信息", "title", 800, 400, function() {
+                 var <#=formId#> = $(top.window.frames["frm_<#=modelName.TrimStart('T').ToLower()#>_show_edit"].document).find("#<#=formId#>");
+                //console.log(<#=formId#>);
+                var flag = top.window.document.getElementById("frm_<#=modelName.TrimStart('T').ToLower()#>_show_edit").contentWindow.form_valid();
+                if (!flag) {
+                    return false;
+                }
+                 var data = $(<#=formId#>).serialize();
+                //console.log((data));
+                
+				 showTopConfirm("确认提交该记录吗？", "温馨提示", function() {
+				$.ajax({
+                    type: "POST",
+                    cache: false,
+                    url: "/api/<#=modelName.TrimStart('T')+"Api"#>/Edit<#=modelName.TrimStart('T')#>",
+                    data: data,
+                    dataType: "json",
+                    beforeSend: function() {
+                       showTopDialog("show_edit_loding", "<div class='dialog_loading'>修改中，请稍后...</div>", "温馨提示", 400, 95);
+                    },
+                    complete: function() {
+                        //d.close().remove();
+                    },
+                    success: function(result) {
+					top.dialog.list["show_edit_loding"].close().remove();
+                        //toLowerCase报错
+                        //var status = result.Status.toLowerCase();
+                        var status = result.Status;
+                        if (status == true || status == "true" || status == "True") {
+                            //刷新数据
+                            <#=gridId#>.bootgrid("reload");
+                            //console.log(grid);
+
+                            showMsg("修改成功！", "Success");
+                        } else {
+                            showMsg("系统异常，修改失败！", "Error");
+                        }
+                    },
+                    error: function() {
+					    top.dialog.list["show_edit_loding"].close().remove();
+                        showMsg("网络连接错误！", "Error");
+                    }
+                });
+
+            },function() {
+                //top.dialog.list["pregnanterinfo_show_edit"].close().remove();
+            });
+            return false;
+        });
+
+            //必须有这个，阻止刷新
+            return false;
+        }
+
+		function <#=multiDeleteFun#>() {
+        var ids = get_selected_ids("<#=modelName.TrimStart('T').ToLower()#>_grid_data");
+        //console.log(ids);
+        if (ids == "") {
+            showTopMsg("请选择你要删除的记录，删除后不可恢复！", "错误提示", "Error");
+            return false;
+        }
+        //return false;
+        <#=deleteFun#>(ids);
+         }
+
+        function <#=deleteFun#>(ids) {
+            showTopDialog("<#=modelName.TrimStart('T').ToLower()#>_show_delete","<div class='dialog_confirm'>确认删除选中记录吗？删除后不可恢复！</div>","温馨提示",400, 75,function () {
+                $.ajax({
+                    type: "GET",
+                    cache: false,
+                    url:"/api/<#=modelName.TrimStart('T')+"Api"#>/Delete<#=modelName.TrimStart('T')#>?ids="+ids,
+                    dataType: "json",
+                    beforeSend: function() {
+                         showTopDialog("show_delete_loding", "<div class='dialog_loading'>删除中，请稍后...</div>", "温馨提示", 400, 95);
+                    },
+                    complete: function() {
+                        //d.close().remove();
+                    },
+                    success: function(result) {
+					    top.dialog.list["show_delete_loding"].close().remove();
+                        //toLowerCase报错
+                        //var status = result.Status.toLowerCase();
+                        var status = result.Status;
+                        if (status == true || status == "true" || status == "True") {
+                            //刷新数据
+                            <#=gridId#>.bootgrid("reload");
+                            showMsg("删除成功！", "Success");
+                        } else {
+                            showMsg("系统异常，删除失败！", "Error");
+                        }
+                    },
+                    error: function() {
+					    top.dialog.list["show_delete_loding"].close().remove();
+                        showMsg("网络连接错误！", "Error");
+                    }
+                });
+            });
+            //必须有这个，阻止刷新
+            return false;
+        }
+
+
+		//回收站
+		         function clientinfo_trash() {
+                var ids = get_selected_ids("clientinfo_grid_data");
+                //console.log(ids);
+                if (ids == "") {
+                    showTopMsg("请选择你要删除的记录！", "错误提示", "Error");
+                    return false;
+                }
+                //console.log(ids);
+                //return false;
+                showTopDialog("show_clientinfo_trash", "<div class='dialog_confirm'>确认将选中记录放入回收站吗？</div>", "温馨提示", 400, 75, function () {
+                    $.ajax({
+                        type: "GET",
+                        cache: false,
+                        url: "/api/ClientInfoApi/UpdateClientInfoStatus?ids=" + ids + "&status=1",
+                        //data: { ids: ids },
+                        dataType: "json",
+                        beforeSend: function () {
+                            //showMsg("添加中，请稍后...");
+                        },
+                        complete: function () {
+                            //d.close().remove();
+                        },
+                        success: function (result) {
+                            //toLowerCase报错
+                            //var status = result.Status.toLowerCase();
+                            var status = result.Status;
+                            if (status == true || status == "true" || status == "True") {
+                                //刷新数据
+                                clientinfo_grid.bootgrid("reload");
+                                showMsg("客户放入回收站成功！", "Success");
+                            } else {
+                                showMsg("系统异常，客户放入回收站失败！", "Error");
+                            }
+                        },
+                        error: function () {
+                            showTopMsg("网络连接错误!", "错误提示", "Error");
+                        }
+                    });
+                });
+                //必须有这个，阻止刷新
+                return false;
+            }
+    </script>
+ </head>
+    <body>
+
+<div style="margin: 0px 20px;">
+    <table id="<#=gridId#>_data" class="table table-condensed table-hover table-striped table-bordered" data-selection="true" data-multi-select="true">
+        <thead>
+            <tr>
+	       <#foreach (var col in tb.Columns){#>
+		  <th data-column-id="<#= NamingConversion.Default.PropertyName(col.ColumnName) #>" data-header-align="center" data-align="center" data-formatter="<#= NamingConversion.Default.PropertyName(col.ColumnName) #>" data-order="desc"><#=col.ColumnName#></th>
+<#}#> 
+<#foreach (var col in tb.PrimaryKeys){#>	
+		  <th data-column-id="<#= NamingConversion.Default.PropertyName(col.ColumnName) #>" data-type="numeric" data-identifier="true" data-formatter="commands" data-sortable="false">操作</th>
+
+<#}#> 
+		    </tr>
+        </thead>
+    </table>
+</div>
+
+</body>
+</html>
+
+
+<#
+  }
+#>
+
+<#
+ manager.EndBlock();
+ //结束ServiceImpl===================================================================================
+#>
+
+<#
+
+foreach (var tb in databaseSchema.Views){
+	var EdIndexViewFilename= "I"+NamingConversion.Default.ClassName( tb.TableName)+ "Dao";
+var modelName=NamingConversion.Default.ClassName( tb.TableName);
+var listName=NamingConversion.Default.QueryableName( tb.TableName);
+	 manager.StartNewFile(NamingConversion.Default.ClassName(tb.TableName) + ".cs");
+	 //开始视图
+	 #>
+
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using NLite.Data;
+using Ed.DBContext;
+using Ed.Entity;
+
+namespace <#= @ServiceNamespace #>
+{
+public  interface <#=EdIndexViewFilename#>:IViewDao<<#=modelName#>>
+    {
+
+	}
+}
+<# 
+} 
+ manager.EndBlock();
+#>
+
+
+
+<#
+ //执行===================================================================================
+ manager.Process(true);
+#>

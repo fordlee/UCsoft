@@ -1,0 +1,453 @@
+﻿<#@ template debug="True" hostspecific="True" language="C#" #>
+<#@ include file="../../MultipleOutputHelper.ttinclude" #>
+<#@ Assembly Name="$(TargetDir)NLite.dll" #>
+<#@ Assembly Name="$(TargetDir)ELinq.dll" #>
+<#@ assembly Name="System.Data" #>
+<#@ import Namespace="NLite.Data" #>
+<#@ import Namespace="NLite.Data.CodeGeneration" #>
+<#@ output extension=".cs" #>
+<#
+	var @contextNamespace = "Ed.DBContext";
+	var @ModelNamespace = "Ed.Model";
+	var @ServiceNamespace = "Ed.Service";
+	var @controllerNamespace="Ed.Web";
+	var @Date=System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+	var connectionStringName = "EdSqlServer";
+	var dbType=GetAppSettings("databaseType");
+	switch(dbType){
+		    case "SqlServer":
+	        connectionStringName = "EdSqlServer";
+			break;
+			case "MySql":
+				 connectionStringName = "EdMySql";
+			break;
+			default:
+			 connectionStringName = "EdSqlServer";
+			break;
+    }
+	//var dbContextName = Host.TemplateFile.Split('\\')[Host.TemplateFile.Split('\\').Length - 1].TrimEnd('.', 't');
+	var dbContextName ="EdDBContext";
+	var connectionStringSetting = GetConnectionStringSettings(connectionStringName);
+	var connectionString = connectionStringSetting.ConnectionString;
+	var dbProviderName = connectionStringSetting.ProviderName;
+	var dbConfiguration = DbConfiguration.Configure(connectionString, dbProviderName);
+	var databaseSchema = dbConfiguration.Schema;
+	var manager = Manager.Create(Host, GenerationEnvironment);
+	//manager.StartHeader();
+#>
+
+
+<#foreach (var tb in databaseSchema.Tables){#>
+<#
+ //开始Controller===================================================================================
+var controllerApiFilename= NamingConversion.Default.ClassName( tb.TableName).TrimStart('T')+ "ApiController";
+var serviceFilename= "I"+NamingConversion.Default.ClassName( tb.TableName).TrimStart('T')+ "Service";
+var serviceImplFilename= NamingConversion.Default.ClassName( tb.TableName).TrimStart('T')+ "ServiceImpl";
+var serviceTypename= "I"+NamingConversion.Default.ClassName( tb.TableName).TrimStart('T')+ "Service";
+var servicePerportyname= NamingConversion.Default.ClassName( tb.TableName).TrimStart('T')+ "Service";
+var serviceModelName=NamingConversion.Default.ClassName( tb.TableName);
+var tempModelName=NamingConversion.Default.ClassName( tb.TableName).TrimStart('T');
+tempModelName=tempModelName[0].ToString().ToLower() + tempModelName.Substring(1);
+var serviceListName=NamingConversion.Default.QueryableName( tb.TableName);
+var tempListName=NamingConversion.Default.QueryableName( tb.TableName).TrimStart('T');
+tempListName=tempListName[0].ToString().ToLower() + tempListName.Substring(1);
+manager.StartNewFile(controllerApiFilename+ ".cs");
+#>
+//ReSharper disable All 禁止ReSharper显示警告
+using System.Collections;
+using System.Net.Http;
+using System.Text;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Http;
+using Ed.Common;
+using Ed.Entity;
+using Ed.Service;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Spring.Context.Support;
+
+namespace <#= @controllerNamespace #>
+{
+public  class <#=controllerApiFilename#>:ApiController
+    {
+	#region  依赖注入(<#=controllerApiFilename#>注入<#=servicePerportyname#>) <#=@Date#> By 唐有炜
+	 /// <summary>
+     /// 依赖注入(<#=controllerApiFilename#>注入<#=servicePerportyname#>) <#=@Date#> By 唐有炜
+     /// </summary>
+	 private readonly <#=serviceTypename#>   <#=servicePerportyname#> = (<#=serviceTypename#> ) ContextRegistry.GetContext().GetObject("<#=tempModelName+"Service"#>");
+	#endregion
+
+	    #region 逻辑实现 <#=@Date#> By 唐有炜
+
+		#region 列表 <#=@Date#> By 唐有炜
+      
+	    #region 获取所有<#=serviceModelName.TrimStart('T')#>列表（默认前10条） <#=@Date#>5 By 唐有炜
+		//GET /api/<#=serviceModelName.TrimStart('T')+"Api"#>/Get<#=serviceListName.TrimStart('T')#>?pageIndex={pageIndex}&pageSize={pageSize}&sortField={sortField}&sortType={sortType}&searchPhrase={searchPhrase}&format={format}
+		/// <summary>
+        /// 获取所有<#=serviceModelName.TrimStart('T')#>列表（默认前10条） <#=@Date#>5 By 唐有炜
+        /// </summary>
+        /// <param name="pageIndex">页码</param>
+        /// <param name="pageSize">页数.</param>
+        /// <param name="sortField">排序字段</param>
+        /// <param name="sortType">排序类型</param>
+        ///<param name="searchPhrase">searchPhrase(格式：加密的条件)</param>
+        /// <param name="format">返回格式（json：返回json数据，xml：返回xml数据）</param>
+        /// <returns>IEnumerable&lt;<#=serviceModelName#>&gt;.</returns>
+        public IEnumerable<<#=serviceModelName#>> Get<#=serviceListName.TrimStart('T')#>(int? pageIndex, int? pageSize, string sortField, string sortType,string searchPhrase, string format)
+        {
+            int total = 0;
+            //分页
+            int current = pageIndex == null ? 1 : (int) pageIndex;
+            int rowCount = pageSize == null ? 10 : (int) pageSize;
+            //排序
+            IDictionary<string, EdEnums.OrderEmum> dataOrders = new Dictionary<string, EdEnums.OrderEmum>();
+            if (!String.IsNullOrEmpty(sortField) && !String.IsNullOrEmpty(sortType))
+            {
+                dataOrders.Add(sortType.ToLower() == EdEnums.OrderEmum.Desc.ToString().ToLower()
+                    ? new KeyValuePair<string, EdEnums.OrderEmum>(sortField, EdEnums.OrderEmum.Desc)
+                    : new KeyValuePair<string, EdEnums.OrderEmum>(sortField, EdEnums.OrderEmum.Asc));
+            }
+            else
+            {
+                dataOrders.Add(new KeyValuePair<string, EdEnums.OrderEmum>("Id", EdEnums.OrderEmum.Desc));
+            }
+            //搜索
+            string predicate = "true";
+            //这里是搜索条件组装(解密)
+            if (!String.IsNullOrEmpty(searchPhrase) )
+            {
+                predicate = Base64.Base64StringToString(searchPhrase);
+            }
+            var models = <#=servicePerportyname#>.Get<#=serviceModelName.TrimStart('T')#>List(current, rowCount, out total, predicate, dataOrders).AsEnumerable();
+            return models;
+	    }
+		
+        #endregion
+
+		 #region  获取Bootgrid <#=serviceModelName.TrimStart('T')#>列表 <#=@Date#> By 唐有炜
+	
+        //POST /api/<#=serviceModelName.TrimStart('T')+"Api"#>/GetBootGrid<#=serviceListName.TrimStart('T')#>?current=1&rowCount=10&sort[field_name]=DESC&searchPhrase=
+        /// <summary>
+        /// 获取Bootgrid <#=serviceModelName.TrimStart('T')#>列表 <#=@Date#> By 唐有炜
+        /// </summary>
+		/// <param name="current">current</param>
+        /// <param name="rowCount">rowCount</param>
+		/// <param name="sort[fieldName]">sort[fieldName]</param>
+		/// <param name="searchPhrase">searchPhrase(格式)</param>
+        /// <returns>json</returns>
+        [HttpPost]
+        public BootGrid GetBootGrid<#=serviceListName.TrimStart('T')#>()
+        {
+		           var context = (HttpContextBase) Request.Properties["MS_HttpContext"]; //获取传统context
+            HttpRequestBase request = context.Request; //定义传统request对象
+            //基本参数
+            int current = int.Parse(request.Params.Get("current") ?? "1");
+            int rowCount = int.Parse(request.Params.Get("rowCount") ?? "1");
+            string sort = request.Params.AllKeys.SingleOrDefault(a => a.Contains("sort"));
+            string sortField = sort.Split('[')[1].TrimEnd(']').ToLower();
+            string sortType = request.Params.GetValues(sort).SingleOrDefault().ToLower();
+            string searchPhrase = request.Params.Get("searchPhrase");
+			//1 数值 2 搜索条件字符串
+            string searchType = request.Params.Get("searchType")??"1";
+
+            //要查询的字段（控值所有）
+            string selector = "";
+         
+		    //搜索
+            string predicate = "true";
+            //string predicate = "Id.Contains(@0)";
+
+            //排序
+            string ordering = String.Concat(new[] {sortField, " ", sortType});
+
+            object[] values = {};
+            //object[] values = {searchPhrase};
+         
+		    //数据总数
+            int total = 0;
+
+            //获取数据
+            List<Dictionary<string, object>> <#=tempListName#> =
+                <#=servicePerportyname#>.Get<#=serviceModelName.TrimStart('T')#>List(current, rowCount, selector, predicate, ordering,
+                    out total, values);
+             //空值处理
+            if (null == <#=tempListName#>)
+            {
+                <#=tempListName#>=new List<Dictionary<string, object>>();
+            }
+
+
+            //组装输出
+            var bootGrid = new BootGrid
+            {
+                current = current,
+                rowCount = rowCount,
+                rows = <#=tempListName#>,
+                total = total
+            };
+            return bootGrid;
+        }
+
+        #endregion
+
+
+		#region  获取ZTree树形节点 <#=@Date#> By 唐有炜
+		
+        //POST /api/<#=serviceModelName.TrimStart('T')+"Api"#>/GetZTree<#=serviceListName.TrimStart('T')#>/?id=0
+        /// <summary>
+        /// 获取<#=serviceModelName.TrimStart('T')#>ZTree树形节点 <#=@Date#> By 唐有炜
+        /// </summary>
+        /// <returns>json</returns>
+        [HttpPost]
+        public Node GetZTree<#=serviceListName.TrimStart('T')#>(int id=0)
+        {
+            var context = (HttpContextBase)Request.Properties["MS_HttpContext"]; //获取传统context
+            HttpRequestBase request = context.Request; //定义传统request对象
+            //基本参数
+
+           //var nodes =   <#=servicePerportyname#>.AsyncGetNodes(id);
+		   var nodes =new Node(){id=0,name = "null"};
+           return nodes;
+        }
+	
+        #endregion
+
+
+
+	   #endregion 
+
+
+	   #region 查看 <#=@Date#> By 唐有炜
+	   	// GET /api/<#=serviceModelName.TrimStart('T')+"Api"#>/Get/1
+        /// <summary>
+        /// 获取一条<#=serviceModelName.TrimStart('T')#>数据 <#=@Date#> By 唐有炜
+        /// </summary>
+        /// <param name="id">id</param>
+        /// <returns><#=serviceModelName#></returns>
+       public <#=serviceModelName#> Get<#=serviceModelName.TrimStart('T')#>(int id)
+	   {
+	   	    var model =  <#=servicePerportyname#>.Get<#=serviceModelName.TrimStart('T')#>(temp => temp.Id == id);
+            //var timeConverter =new IsoDateTimeConverter();
+            //这里使用自定义日期格式，如果不使用的话，默认是ISO8601格式     
+            //timeConverter.DateTimeFormat = "yyyy-MM-dd";
+            //return JsonConvert.SerializeObject(model, timeConverter); 
+			return model;
+	   }
+
+      #endregion
+
+	  #region 添加、修改 <#=@Date#> By 唐有炜
+       // POST /api/<#=serviceModelName.TrimStart('T')+"Api"#>/Add<#=serviceModelName.TrimStart('T')#>
+       /// <summary>
+       ///添加信息 <#=@Date#> By 唐有炜
+       /// </summary>
+       /// <param name="<#=tempModelName#>"><#=tempModelName#></param>
+       /// <returns>ResponseMessage</returns>
+	    [HttpPost]
+        public ResponseMessage Add<#=serviceModelName.TrimStart('T')#>([FromBody] <#=serviceModelName#> <#=tempModelName#>)
+        {
+            ResponseMessage rmsg = new ResponseMessage();
+            if (<#=servicePerportyname#>.Add<#=serviceModelName.TrimStart('T')#>(<#=tempModelName#>))
+            {
+                rmsg.Status = true;
+            }
+            else
+            {
+                rmsg.Status = false;
+            }
+
+
+            return rmsg;
+        }
+		
+
+       // POST /api/<#=serviceModelName.TrimStart('T')+"Api"#>/Edit<#=serviceModelName.TrimStart('T')#>
+       /// <summary>
+       ///修改信息 <#=@Date#> By 唐有炜
+       /// </summary>
+       /// <param name="<#=tempModelName#>"><#=tempModelName#></param>
+       /// <returns>ResponseMessage</returns>
+		[HttpPost]
+        public ResponseMessage Edit<#=serviceModelName.TrimStart('T')#>([FromBody] <#=serviceModelName#> <#=tempModelName#>)
+		{
+		
+	      	ResponseMessage rmsg = new ResponseMessage();
+		     if ( <#=servicePerportyname#>.Edit<#=serviceModelName.TrimStart('T')#>(<#=tempModelName#>))
+			{
+                rmsg.Status = true;
+            }
+            else
+            {
+                rmsg.Status = false;
+            }
+
+
+            return rmsg;
+           
+		}
+		
+		#endregion
+		
+
+		#region 删除    <#=@Date#> By 唐有炜
+		
+        // GET /api/<#=serviceModelName.TrimStart('T')+"Api"#>/Delete<#=serviceModelName.TrimStart('T')#>/5       
+        /// <summary>
+        ///删除    <#=@Date#> By 唐有炜
+        /// </summary>
+        /// <param name="ids">要删除的ids集合</param>
+        /// <returns>ResponseMessage.</returns>
+        [HttpGet]
+        public ResponseMessage Delete<#=serviceModelName.TrimStart('T')#>(string ids)
+        {
+            ResponseMessage rmsg = new ResponseMessage();
+            if (<#=servicePerportyname#>.Delete<#=serviceModelName.TrimStart('T')#>(ids))
+            {
+                rmsg.Status = true;
+            }
+            else
+            {
+                rmsg.Status = false;
+            }
+
+
+            return rmsg;
+        }
+	
+        #endregion
+		
+		#endregion 
+
+
+	    #region 修改状态 <#=@Date#> By 唐有炜
+		
+        // GET /api/<#=serviceModelName.TrimStart('T')+"Api"#>/Update<#=serviceModelName.TrimStart('T')#>Status/5
+        /// <summary>
+        /// 修改状态 <#=@Date#> By 唐有炜
+        /// </summary>
+        /// <param name="id">id</param>
+        /// <returns>ResponseMessage</returns>
+        [HttpPost]
+        public ResponseMessage Update<#=serviceModelName.TrimStart('T')#>Status(int ids)
+        {
+            ResponseMessage rmsg = new ResponseMessage();
+             if (<#=servicePerportyname#>.UpdateEntityStatus(null,null))
+                        {
+                            rmsg.Status = true;
+                        }
+                        else
+                        {
+                            rmsg.Status = false;
+                        }
+            
+            return rmsg;
+        }
+		
+        #endregion
+
+
+
+
+		 #region 验证  2014-10-16 17:25:33 By 唐有炜
+
+        // /api/<#=serviceModelName.TrimStart('T')#>Api/Validate?fields=1&eqs=&values=&operations=2
+        /// <summary>
+        /// 验证字段是否存在  2014-10-15 14:36:33 By 唐有炜(注意：字段必须与条件一一对应)
+        /// </summary>
+        /// <param name="fields">字段集合(id,name)</param>
+        /// <param name="eqs">The eqs.</param>
+        /// <param name="values">The values.</param>
+        /// <param name="operations">条件集合（or,and）</param>
+        /// <param name="existReturn">存在时的返回结果（默认true）</param>
+        /// <returns>验证状态</returns>
+        [HttpGet]
+        public HttpResponseMessage Validate(string fields, string eqs, string values, string operations,bool existReturn=true)
+        {
+		    //构造参数
+            var Status = false;
+            object[] parms = null;
+            string predicate = Utils.BuildPredicate(fields, eqs, values, operations, out parms);
+
+			//记录日志
+            LogHelper.Debug("验证存在predicate：存在（true），不存在（false）" + predicate+ "【参数】" + String.Concat(parms));
+
+			//发送请求
+            if (<#=servicePerportyname#>.Validate(predicate,parms))
+            {
+                Status = true;
+            }
+            else
+            {
+                Status = false;
+            }
+
+			//状态判断
+            if (!existReturn)
+            {
+                Status = !Status; 
+            }
+
+            //输出结果
+            var rmsg = new HttpResponseMessage
+            {
+                Content = new StringContent(Status.ToString().ToLower(), System.Text.Encoding.UTF8, "text/plain")
+            };
+            return rmsg;
+        }
+
+        #endregion
+
+
+
+
+	}
+}
+<#
+  }
+#>
+
+<#
+ manager.EndBlock();
+ //结束ServiceImpl===================================================================================
+#>
+
+<#
+
+foreach (var tb in databaseSchema.Views){
+	var serviceFilename= "I"+NamingConversion.Default.ClassName( tb.TableName)+ "Dao";
+var serviceModelName=NamingConversion.Default.ClassName( tb.TableName);
+var serviceListName=NamingConversion.Default.QueryableName( tb.TableName);
+	 manager.StartNewFile(NamingConversion.Default.ClassName(tb.TableName) + ".cs");
+	 //开始视图
+	 #>
+
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using NLite.Data;
+using Ed.DBContext;
+using Ed.Entity;
+
+namespace <#= @ServiceNamespace #>
+{
+public  interface <#=serviceFilename#>:IViewDao<<#=serviceModelName#>>
+    {
+
+	}
+}
+<# 
+} 
+ manager.EndBlock();
+#>
+
+
+
+<#
+ //执行===================================================================================
+ manager.Process(true);
+#>

@@ -1,0 +1,136 @@
+﻿<#@ template debug="True" hostspecific="True" language="C#" #>
+<#@ include file="../MultipleOutputHelper.ttinclude" #>
+<#@ Assembly Name="$(TargetDir)NLite.dll" #>
+<#@ Assembly Name="$(TargetDir)ELinq.dll" #>
+<#@ assembly Name="System.Data" #>
+<#@ import Namespace="NLite.Data" #>
+<#@ import Namespace="NLite.Data.CodeGeneration" #>
+<#@ output extension=".cs" #>
+<#
+    var @contextNamespace = "UCsoft.Data";
+	var @ModelNamespace = "UCsoft.Entity";
+	var @DaoNamespace = "UCsoft.Dao";
+	var @Date=System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+	
+    var connectionStringName = "SqlServer";
+	var dbType=GetAppSettings("databaseType");
+	switch(dbType){
+		    case "SqlServer":
+	        connectionStringName = "SqlServer";
+			break;
+			case "MySql":
+	        connectionStringName = "MySql";
+			break;
+			case "Oracle":
+	        connectionStringName = "Oracle";
+			break;
+			case "Access":
+	        connectionStringName = "Access";
+			break;
+			case "SqlCe":
+	        connectionStringName = "SqlCe";
+			break;
+			case "SqLite":
+	        connectionStringName = "SqLite";
+			break;
+			default:
+			 connectionStringName = "SqlServer";
+			break;
+    }
+
+	var dbContextName ="DBContext";
+	var connectionStringSetting = GetConnectionStringSettings(connectionStringName);
+	var connectionString = connectionStringSetting.ConnectionString;
+	var dbProviderName = connectionStringSetting.ProviderName;
+	var dbConfiguration = DbConfiguration.Configure(connectionString, dbProviderName);
+	var databaseSchema = dbConfiguration.Schema;
+	var manager = Manager.Create(Host, GenerationEnvironment);
+	//manager.StartHeader();
+#>
+
+
+<#foreach (var tb in databaseSchema.Tables){#>
+<#
+ //开始IDao===================================================================================
+var daoFilename= "I"+NamingConversion.Default.ClassName( tb.TableName)+ "Dao";
+var daoModelName=NamingConversion.Default.ClassName( tb.TableName);
+var daoListName=NamingConversion.Default.QueryableName( tb.TableName);
+manager.StartNewFile(daoFilename+ ".cs");
+#>
+/*
+ * ========================================================================
+ * Copyright(c) 2013-2014 郑州优创科技有限公司, All Rights Reserved.
+ * ========================================================================
+ *  
+ * 【表操作Dao接口】
+ *  
+ *  
+ * 作者：唐有炜   时间：<#=@Date#>
+ * 文件名：<#=daoFilename#>
+ * 版本：V1.0.0
+ * 
+ * 修改者：唐有炜           时间：<#=@Date#>            
+ * 修改说明：修改说明
+ * ========================================================================
+*/
+using UCsoft.Entity;
+namespace <#= @DaoNamespace #>
+{
+    public  interface <#=daoFilename#>:ITableDao<<#=daoModelName#>>
+    {
+
+	}
+}
+<#
+  }
+#>
+
+<#
+ manager.EndBlock();
+ //结束IDao===================================================================================
+#>
+
+<#
+
+foreach (var tb in databaseSchema.Views){
+var daoFilename= "I"+NamingConversion.Default.ClassName( tb.TableName)+ "Dao";
+var daoModelName=NamingConversion.Default.ClassName( tb.TableName);
+var daoListName=NamingConversion.Default.QueryableName( tb.TableName);
+	 manager.StartNewFile(daoFilename+ ".cs");
+	 //开始视图
+	 #>
+/*
+ * ========================================================================
+ * Copyright(c) 2013-2014 郑州优创科技有限公司, All Rights Reserved.
+ * ========================================================================
+ *  
+ * 【视图操作Dao接口】
+ *  
+ *  
+ * 作者：唐有炜   时间：<#=@Date#>
+ * 文件名：<#=daoFilename#>
+ * 版本：V1.0.0
+ * 
+ * 修改者：唐有炜           时间：<#=@Date#>            
+ * 修改说明：修改说明
+ * ========================================================================
+*/
+using UCsoft.Entity;
+namespace <#= @DaoNamespace #>
+{
+    public  interface <#=daoFilename#>:IViewDao<<#=daoModelName#>>
+    {
+
+	}
+}
+<# 
+} 
+ manager.EndBlock();
+#>
+
+
+
+<#
+ //执行===================================================================================
+ manager.Process(true);
+#>

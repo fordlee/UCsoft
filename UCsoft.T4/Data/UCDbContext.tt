@@ -64,9 +64,6 @@
  * 修改说明：修改说明
  * ========================================================================
 */
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using NLite.Data;
 using <#=@ModelNamespace#>;
 using NLite.Reflection;

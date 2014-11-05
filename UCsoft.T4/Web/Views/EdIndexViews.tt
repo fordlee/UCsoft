@@ -1,0 +1,135 @@
+﻿<#@ template debug="True" hostspecific="True" language="C#" #>
+<#@ include file="../../MultipleOutputHelper.ttinclude" #>
+<#@ Assembly Name="$(TargetDir)NLite.dll" #>
+<#@ Assembly Name="$(TargetDir)ELinq.dll" #>
+<#@ assembly Name="System.Data" #>
+<#@ import Namespace="NLite.Data" #>
+<#@ import Namespace="NLite.Data.CodeGeneration" #>
+<#@ output extension=".cshtml" #>
+<#
+    var @basePath=System.IO.Path.GetDirectoryName(Host.TemplateFile);
+	var @contextNamespace = "Ed.DBContext";
+	var @ModelNamespace = "Ed.Model";
+	var @ServiceNamespace = "Ed.Service";
+	var @Date=System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+	var connectionStringName = "EdSqlServer";
+	var dbType=GetAppSettings("databaseType");
+	switch(dbType){
+		    case "SqlServer":
+	        connectionStringName = "EdSqlServer";
+			break;
+			case "MySql":
+				 connectionStringName = "EdMySql";
+			break;
+			default:
+			 connectionStringName = "EdSqlServer";
+			break;
+    }
+	//var dbContextName = Host.TemplateFile.Split('\\')[Host.TemplateFile.Split('\\').Length - 1].TrimEnd('.', 't');
+	var dbContextName ="EdDBContext";
+	var connectionStringSetting = GetConnectionStringSettings(connectionStringName);
+	var connectionString = connectionStringSetting.ConnectionString;
+	var dbProviderName = connectionStringSetting.ProviderName;
+	var dbConfiguration = DbConfiguration.Configure(connectionString, dbProviderName);
+	var databaseSchema = dbConfiguration.Schema;
+	var manager = Manager.Create(Host, GenerationEnvironment);
+	//manager.StartHeader();
+#>
+
+
+<#foreach (var tb in databaseSchema.Tables){#>
+<#
+ //开始ServiceImpl===================================================================================
+var modelName=NamingConversion.Default.ClassName( tb.TableName);
+var listName=NamingConversion.Default.QueryableName( tb.TableName);
+var newPath=System.IO.Path.Combine(@basePath,modelName.TrimStart('T')).ToString().Replace("\\","\\\\");
+
+//表单id
+var formId=modelName.TrimStart('T').ToLower()+"_form";
+
+
+
+
+if(!System.IO.Directory.Exists(newPath)){
+System.IO.Directory.CreateDirectory(newPath);
+}
+var EdIndexViewFilename= @basePath+"\\"+modelName.TrimStart('T')+ "\\"+ "Index";
+manager.StartNewFile(EdIndexViewFilename+".cshtml");
+#>
+@using System.Web.Optimization
+@model dynamic
+@{
+    Layout = null;
+}
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+    <title>雪绒花_首页</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+
+    @Styles.Render("~/Themes/default/css/cp.globle.min6.css")
+    @Scripts.Render("~/Themes/default/js/cp.globle.min6.js")
+    <script type="text/javascript">
+       
+    </script>
+ </head>
+    <body>
+
+<div style="margin: 0px 20px;">
+   //内容
+</div>
+
+</body>
+</html>
+
+
+<#
+  }
+#>
+
+<#
+ manager.EndBlock();
+ //结束ServiceImpl===================================================================================
+#>
+
+<#
+
+foreach (var tb in databaseSchema.Views){
+	var EdIndexViewFilename= "I"+NamingConversion.Default.ClassName( tb.TableName)+ "Dao";
+var modelName=NamingConversion.Default.ClassName( tb.TableName);
+var listName=NamingConversion.Default.QueryableName( tb.TableName);
+	 manager.StartNewFile(NamingConversion.Default.ClassName(tb.TableName) + ".cs");
+	 //开始视图
+	 #>
+
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using NLite.Data;
+using Ed.DBContext;
+using Ed.Entity;
+
+namespace <#= @ServiceNamespace #>
+{
+public  interface <#=EdIndexViewFilename#>:IViewDao<<#=modelName#>>
+    {
+
+	}
+}
+<# 
+} 
+ manager.EndBlock();
+#>
+
+
+
+<#
+ //执行===================================================================================
+ manager.Process(true);
+#>

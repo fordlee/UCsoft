@@ -36,6 +36,9 @@
     <Reference Include="MySql.Data">
       <HintPath>..\packages\MySql.Data.6.8.3\lib\net40\MySql.Data.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="NLite">
       <HintPath>..\packages\NLite.0.9.5.7\lib\net40\NLite.dll</HintPath>
     </Reference>
@@ -52,11 +55,156 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entity\Entity.cs">
+    <Compile Include="Dao\Impl\UCDaoImpl.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Entity.tt</DependentUpon>
+      <DependentUpon>UCDaoImpl.tt</DependentUpon>
     </Compile>
+    <Compile Include="Dao\UCIDao.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UCIDao.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dao\Impl\TCusBaseDaoImpl.cs">
+      <DependentUpon>UCDaoImpl.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dao\Impl\TCusConDaoImpl.cs">
+      <DependentUpon>UCDaoImpl.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dao\Impl\TCusLogDaoImpl.cs">
+      <DependentUpon>UCDaoImpl.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dao\Impl\TFunAppCompanyDaoImpl.cs">
+      <DependentUpon>UCDaoImpl.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dao\Impl\TFunAppDaoImpl.cs">
+      <DependentUpon>UCDaoImpl.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dao\Impl\TFunExpandDaoImpl.cs">
+      <DependentUpon>UCDaoImpl.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dao\Impl\TFunFilterDaoImpl.cs">
+      <DependentUpon>UCDaoImpl.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dao\Impl\TFunMyappCompanyDaoImpl.cs">
+      <DependentUpon>UCDaoImpl.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dao\Impl\TFunMyappDaoImpl.cs">
+      <DependentUpon>UCDaoImpl.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dao\Impl\TFunOperatingDaoImpl.cs">
+      <DependentUpon>UCDaoImpl.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dao\Impl\TFunTagDaoImpl.cs">
+      <DependentUpon>UCDaoImpl.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dao\Impl\TSysCompanyDaoImpl.cs">
+      <DependentUpon>UCDaoImpl.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dao\Impl\TSysDepartmentDaoImpl.cs">
+      <DependentUpon>UCDaoImpl.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dao\Impl\TSysLogDaoImpl.cs">
+      <DependentUpon>UCDaoImpl.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dao\Impl\TSysPowerDaoImpl.cs">
+      <DependentUpon>UCDaoImpl.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dao\Impl\TSysRoleDaoImpl.cs">
+      <DependentUpon>UCDaoImpl.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dao\Impl\TSysUserDaoImpl.cs">
+      <DependentUpon>UCDaoImpl.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dao\Impl\VAppCompanyDaoImpl.cs">
+      <DependentUpon>UCDaoImpl.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dao\Impl\VCompanyUserDaoImpl.cs">
+      <DependentUpon>UCDaoImpl.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dao\Impl\VCustomerContactDaoImpl.cs">
+      <DependentUpon>UCDaoImpl.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dao\Impl\VMyappCompanyDaoImpl.cs">
+      <DependentUpon>UCDaoImpl.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dao\Impl\VSysDepartmentDaoImpl.cs">
+      <DependentUpon>UCDaoImpl.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dao\ITableDao.cs" />
+    <Compile Include="Dao\ITCusBaseDao.cs">
+      <DependentUpon>UCIDao.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dao\ITCusConDao.cs">
+      <DependentUpon>UCIDao.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dao\ITCusLogDao.cs">
+      <DependentUpon>UCIDao.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dao\ITFunAppCompanyDao.cs">
+      <DependentUpon>UCIDao.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dao\ITFunAppDao.cs">
+      <DependentUpon>UCIDao.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dao\ITFunExpandDao.cs">
+      <DependentUpon>UCIDao.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dao\ITFunFilterDao.cs">
+      <DependentUpon>UCIDao.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dao\ITFunMyappCompanyDao.cs">
+      <DependentUpon>UCIDao.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dao\ITFunMyappDao.cs">
+      <DependentUpon>UCIDao.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dao\ITFunOperatingDao.cs">
+      <DependentUpon>UCIDao.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dao\ITFunTagDao.cs">
+      <DependentUpon>UCIDao.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dao\ITSysCompanyDao.cs">
+      <DependentUpon>UCIDao.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dao\ITSysDepartmentDao.cs">
+      <DependentUpon>UCIDao.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dao\ITSysLogDao.cs">
+      <DependentUpon>UCIDao.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dao\ITSysPowerDao.cs">
+      <DependentUpon>UCIDao.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dao\ITSysRoleDao.cs">
+      <DependentUpon>UCIDao.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dao\ITSysUserDao.cs">
+      <DependentUpon>UCIDao.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dao\IVAppCompanyDao.cs">
+      <DependentUpon>UCIDao.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dao\IVCompanyUserDao.cs">
+      <DependentUpon>UCIDao.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dao\IVCustomerContactDao.cs">
+      <DependentUpon>UCIDao.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dao\IViewDao.cs" />
+    <Compile Include="Dao\IVMyappCompanyDao.cs">
+      <DependentUpon>UCIDao.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dao\IVSysDepartmentDao.cs">
+      <DependentUpon>UCIDao.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\UCDbContext.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UCDbContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\Field.cs" />
     <Compile Include="Entity\TCusBase.cs">
       <DependentUpon>Entity.tt</DependentUpon>
     </Compile>
@@ -124,14 +272,164 @@
       <DependentUpon>Entity.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\EdIService.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EdIService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\Impl\EdServiceImpl.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EdServiceImpl.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\Impl\TCusBaseServiceImpl.cs">
+      <DependentUpon>EdServiceImpl.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\Impl\TCusConServiceImpl.cs">
+      <DependentUpon>EdServiceImpl.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\Impl\TCusLogServiceImpl.cs">
+      <DependentUpon>EdServiceImpl.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\Impl\TFunAppCompanyServiceImpl.cs">
+      <DependentUpon>EdServiceImpl.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\Impl\TFunAppServiceImpl.cs">
+      <DependentUpon>EdServiceImpl.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\Impl\TFunExpandServiceImpl.cs">
+      <DependentUpon>EdServiceImpl.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\Impl\TFunFilterServiceImpl.cs">
+      <DependentUpon>EdServiceImpl.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\Impl\TFunMyappCompanyServiceImpl.cs">
+      <DependentUpon>EdServiceImpl.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\Impl\TFunMyappServiceImpl.cs">
+      <DependentUpon>EdServiceImpl.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\Impl\TFunOperatingServiceImpl.cs">
+      <DependentUpon>EdServiceImpl.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\Impl\TFunTagServiceImpl.cs">
+      <DependentUpon>EdServiceImpl.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\Impl\TSysCompanyServiceImpl.cs">
+      <DependentUpon>EdServiceImpl.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\Impl\TSysDepartmentServiceImpl.cs">
+      <DependentUpon>EdServiceImpl.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\Impl\TSysLogServiceImpl.cs">
+      <DependentUpon>EdServiceImpl.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\Impl\TSysPowerServiceImpl.cs">
+      <DependentUpon>EdServiceImpl.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\Impl\TSysRoleServiceImpl.cs">
+      <DependentUpon>EdServiceImpl.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\Impl\TSysUserServiceImpl.cs">
+      <DependentUpon>EdServiceImpl.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\Impl\VAppCompanyServiceImpl.cs">
+      <DependentUpon>EdServiceImpl.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\Impl\VCompanyUserServiceImpl.cs">
+      <DependentUpon>EdServiceImpl.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\Impl\VCustomerContactServiceImpl.cs">
+      <DependentUpon>EdServiceImpl.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\Impl\VMyappCompanyServiceImpl.cs">
+      <DependentUpon>EdServiceImpl.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\Impl\VSysDepartmentServiceImpl.cs">
+      <DependentUpon>EdServiceImpl.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\ITCusBaseService.cs">
+      <DependentUpon>EdIService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\ITCusConService.cs">
+      <DependentUpon>EdIService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\ITCusLogService.cs">
+      <DependentUpon>EdIService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\ITFunAppCompanyService.cs">
+      <DependentUpon>EdIService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\ITFunAppService.cs">
+      <DependentUpon>EdIService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\ITFunExpandService.cs">
+      <DependentUpon>EdIService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\ITFunFilterService.cs">
+      <DependentUpon>EdIService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\ITFunMyappCompanyService.cs">
+      <DependentUpon>EdIService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\ITFunMyappService.cs">
+      <DependentUpon>EdIService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\ITFunOperatingService.cs">
+      <DependentUpon>EdIService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\ITFunTagService.cs">
+      <DependentUpon>EdIService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\ITSysCompanyService.cs">
+      <DependentUpon>EdIService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\ITSysDepartmentService.cs">
+      <DependentUpon>EdIService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\ITSysLogService.cs">
+      <DependentUpon>EdIService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\ITSysPowerService.cs">
+      <DependentUpon>EdIService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\ITSysRoleService.cs">
+      <DependentUpon>EdIService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\ITSysUserService.cs">
+      <DependentUpon>EdIService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\IVAppCompanyService.cs">
+      <DependentUpon>EdIService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\IVCompanyUserService.cs">
+      <DependentUpon>EdIService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\IVCustomerContactService.cs">
+      <DependentUpon>EdIService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\IVMyappCompanyService.cs">
+      <DependentUpon>EdIService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Service\IVSysDepartmentService.cs">
+      <DependentUpon>EdIService.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Data\DBContext.tt">
+    <None Include="Dao\UCIDao.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>DBContext.cs</LastGenOutput>
+      <LastGenOutput>UCIDao.cs</LastGenOutput>
+    </None>
+    <None Include="Dao\Impl\UCDaoImpl.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>UCDaoImpl.cs</LastGenOutput>
+    </None>
+    <None Include="Data\UCDbContext.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>UCDbContext.cs</LastGenOutput>
     </None>
     <None Include="Entity\Entity.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -139,20 +437,79 @@
     </None>
     <None Include="MultipleOutputHelper.ttinclude" />
     <None Include="packages.config" />
+    <None Include="Service\EdIService.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>EdIService.cs</LastGenOutput>
+    </None>
+    <None Include="Service\Impl\EdServiceImpl.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>EdServiceImpl.cs</LastGenOutput>
+    </None>
+    <None Include="Web\Configs\Daos.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Daos.xml</LastGenOutput>
+    </None>
+    <None Include="Web\Configs\Objects.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Objects1.txt</LastGenOutput>
+    </None>
+    <None Include="Web\Configs\Services.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Services.xml</LastGenOutput>
+    </None>
+    <None Include="Web\Configs\Webs.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Webs1.xml</LastGenOutput>
+    </None>
+    <None Include="Web\Controllers\EdApiController.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>EdApiController1.cs</LastGenOutput>
+    </None>
+    <None Include="Web\Controllers\EdControllers.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>EdControllers1.cs</LastGenOutput>
+    </None>
+    <None Include="Web\Views\EdEditViews.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>EdEditViews1.cshtml</LastGenOutput>
+    </None>
+    <None Include="Web\Views\EdIndexViews.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>EdIndexViews1.cshtml</LastGenOutput>
+    </None>
+    <None Include="Web\Views\EdListViews.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>EdListViews1.cshtml</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Dao\" />
-    <Folder Include="Service\" />
-    <Folder Include="Web\" />
-  </ItemGroup>
-  <ItemGroup>
+    <ProjectReference Include="..\UCsoft.Common\UCsoft.Common.csproj">
+      <Project>{ea759968-538a-4ef7-a207-4383cde17c6d}</Project>
+      <Name>UCsoft.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UCsoft.Data\UCsoft.Data.csproj">
+      <Project>{d30bf1e8-c5a6-49e9-b756-20a561d9f76f}</Project>
+      <Name>UCsoft.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\UCsoft.Entity\UCsoft.Entity.csproj">
       <Project>{45e160a7-334b-4473-ad23-4753a456b6e8}</Project>
       <Name>UCsoft.Entity</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Web\Configs\Daos.xml">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Daos.tt</DependentUpon>
+    </Content>
+    <Content Include="Web\Configs\Services.xml">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Services.tt</DependentUpon>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

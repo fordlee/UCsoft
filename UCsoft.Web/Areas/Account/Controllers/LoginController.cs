@@ -26,6 +26,7 @@ using UCsoft.Entity;
 //using Ed.Entity;
 //using Ed.Service;
 //using Ed.Web.Filters;
+using UCsoft.Service;
 
 namespace UCsoft.Web.Areas.Account.Controllers
 {
@@ -37,8 +38,8 @@ namespace UCsoft.Web.Areas.Account.Controllers
     {
         #region  依赖注入 2014-10-13 18:51:08 By 唐有炜
 
-        //public ISysUserService SysUserService { set; get; }
-        //public IAccountService AccountService { set; get; }
+        public ITSysUserService TSysUserService { set; get; }
+        public IAccountService AccountService { set; get; }
 
         #endregion
 
