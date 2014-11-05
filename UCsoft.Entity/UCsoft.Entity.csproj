@@ -64,6 +64,11 @@
     <Compile Include="TSysPower.cs" />
     <Compile Include="TSysRole.cs" />
     <Compile Include="TSysUser.cs" />
+    <Compile Include="VAppCompany.cs" />
+    <Compile Include="VCompanyUser.cs" />
+    <Compile Include="VCustomerContact.cs" />
+    <Compile Include="VMyappCompany.cs" />
+    <Compile Include="VSysDepartment.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
