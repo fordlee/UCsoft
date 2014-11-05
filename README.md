@@ -21,9 +21,29 @@ Unit Test单元测试、RouteDebug路由测试、Log4Net日志记录、支持多
 
 技术架构
 ------
+
+
+
 >1、本程序基于Asp .Net 4.0和.NET MVC4，编译版本为VS2013，最低运行版本为.Net 4.0，IIS 6.0+；  
 >2、支持Access、SQLServer、SqlCE、SQLite、MySQL、ORACLE数据库切换，使用 ELinq作为ORM框架。    
 >3、兼容IE6、7、8+、Firefox、Chrome、Safari             
+>4、层次结构
+>>UCsoft.Doc
+>>=============
+说明：项目文档
+
+>>UCsoft.Web（Web主项目）提示：时间关系，只列了部分，其他的类似
+>>=====================
+
+>>|--App_Start
+>>>|--RouteConfig.cs（路由配置信息）
+
+>>|--Areas(区域，包含项目中的所有模块)
+
+>>|--Themes（存放界面主题（CSS和图片、js脚本和js库））
+>>>|--default（默认主题）
+
+
 
 更新历史
 -------
