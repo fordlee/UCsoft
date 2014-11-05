@@ -1,7 +1,7 @@
 ﻿优创软件平台
 ===========
 
-优创软件平台。使用Spring .NET、ASP .NET MVC、ELinq作为基本项目架构，同时使
+优创软件平台。使用Spring .NET、ASP .NET MVC、ELinq作为基本项目架构，Web Api作为移动App接口、同时使
 Unit Test单元测试、RouteDebug路由测试、Log4Net日志记录、支持多数据库，目前支持Access、SQLServer、SqlCE、SQLite、MySQL、ORACLE，未来还会支持更多的数据库、T4模板代码自动生成
 、Bootstrape作为前端框架。
 
@@ -14,7 +14,7 @@ Unit Test单元测试、RouteDebug路由测试、Log4Net日志记录、支持多
 
 项目简介
 -------
->优创软件平台。使用Spring .NET、ASP .NET MVC、ELinq作为基本项目架构，同时使
+>优创软件平台。使用Spring .NET、ASP .NET MVC、ELinq作为基本项目架构，Web Api作为移动App接口、同时使
 Unit Test单元测试、RouteDebug路由测试、Log4Net日志记录、支持多数据库，目前支持Access、SQLServer、SqlCE、SQLite、MySQL、ORACLE，未来还会支持更多的数据库、T4模板代码自动生成
 、Bootstrape作为前端框架。
 

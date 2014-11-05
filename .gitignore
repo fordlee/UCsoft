@@ -29,3 +29,4 @@ _ReSharper*/
 [Tt]est[Rr]esult*
 UCsoft.T4/Entity/*.cs
 UCsoft.T4/Data/*.cs
+UCsoft.Web/Log/*
