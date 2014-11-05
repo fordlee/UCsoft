@@ -124,6 +124,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="Areas\Account\AccountAreaRegistration.cs" />
     <Compile Include="Areas\Customer\Controllers\CusBaseApiController.cs" />
     <Compile Include="Areas\Customer\Controllers\CusBaseController.cs" />

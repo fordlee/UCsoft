@@ -1,0 +1,227 @@
+﻿@using System.Web.Optimization
+@model dynamic
+@{
+    Layout = null;
+}
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+    <title>雪绒花_组织架构信息管理</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+
+    @Styles.Render("~/Themes/default/css/cp.globle.min6.css")
+    @Scripts.Render("~/Themes/default/js/cp.globle.min6.js")
+    <script type="text/javascript">
+        //全局变量
+        var sysdepartment_grid;
+
+        $(function() {
+
+            //初始化表格
+            InitSysDepartmentGrid();
+        });
+
+
+        function  InitSysDepartmentGrid() {
+            sysdepartment_grid = $("#sysdepartment_grid_data").bootgrid({
+                ajax: true,
+                post: function() {
+                     return {
+                        compNum: $("#CompNum").val()
+                    };
+                },
+                url: "/api/SysDepartmentApi/GetBootGridSysDepartments",
+                selection: true,
+                multiSelect: true,
+                rowSelect: false,
+                keepSelection: true,
+                rowCount: [10, 30, 50],
+                templates: {
+                    header: "<div id=\"{{ctx.id}}\" class=\"{{css.header}}\"><div class=\"row\"><div class=\"col-sm-12 actionBar\"><div class=\"btn-group\" style=\"float:left;\"><button class=\"btn btn-default tip\" title=\"添加\" onclick=\" sysdepartment_add(); \"><span class=\"glyphicon glyphicon-plus\"></span>添加</button><button class=\"btn btn-default tip\" title=\"删除\" onclick=\" sysdepartment_delete(); \"><span class=\"glyphicon glyphicon glyphicon glyphicon-trash\"></span>删除</button></div>" +
+                        "<div class=\"search form-group\"><div class=\"input-group\"><span class=\"icon glyphicon input-group-addon glyphicon-search\"></span> <input type=\"text\" class=\"search-field form-control\" placeholder=\"部门名称或编号\"></div></div>" +
+                        "<p class=\"{{css.actions}}\"></p></div></div></div>"
+                },
+                labels: {
+                    all: "all", //checkbox全选的值
+                    search: "请输入名称",
+                    loading: "加载中...",
+                    noResults: "对不起，暂无符合条件的记录！",
+                    refresh: "刷新",
+                    infos: "从{{ctx.start}} 到 {{ctx.end}}，共{{ctx.total}} 条记录"
+                },
+                formatters: {
+					DepName:function(column, row) {
+                        return "<span style='color:#666565;'><span class='glyphicon glyphicon-home'></span>"+row.DepName+"</span>";
+                    },
+                    "commands": function(column, row) {
+                        return  "<button type=\"button\"  class=\"btn btn-link btn-sm btn-cmd tip\" onclick=\"sysdepartment_edit(" + row.Id + ");\" title=\"修改部门信息\"><span class=\"glyphicon glyphicon-pencil\"></span></button>" +
+                            "<button type=\"button\"  class=\"btn btn-link btn-sm btn-cmd tip\" onclick=\"sysdepartment_delete(" + row.Id + ");\" title=\"删除部门\"><span class=\"glyphicon glyphicon-remove\"></span></button>";
+                    }
+                }
+            }).on("loaded.rs.jquery.bootgrid", function(e) {
+                //按钮提示
+                $('.tip').tooltip();
+                //按钮气泡
+                $('.pop').popover({ html: true, trigger: "hover" });
+                showMsg("数据加载完毕！", "Success");
+            });
+        }
+
+        function sysdepartment_add() {
+            showWindow("show_add", "/Customer/SysDepartment/Edit?actionType=Add", "添加", 700, 240, function () {
+                var form_role = $(window.frames["frm_show_add"].document).find("#form_role");
+                //console.log(form_role);
+                var flag = document.getElementById("frm_show_add").contentWindow.form_valid();
+                if (!flag) {
+                    return false;
+                }
+                //var data = $(form_role).serializeObject();
+                var data = $(form_role).serialize();
+                //console.log((data));
+                $.ajax({
+                    type: "post",
+                    cache: false,
+                    url: "/api/settings/role/addRole",
+                    data: data,
+                    dataType: "json",
+                    beforeSend: function() {
+                        //showMsg("添加中，请稍后...");
+                    },
+                    complete: function() {
+                        //d.close().remove();
+                    },
+                    success: function(result) {
+                        //toLowerCase报错
+                        //var status = result.Status.toLowerCase();
+                        var status = result.Status;
+                        if (status == true || status == "true" || status == "True") {
+                            //刷新数据
+                            sysdepartment_grid.bootgrid("reload");
+                            showMsg("添加成功！", "Success");
+                        } else {
+                            showMsg("系统异常，添加失败！", "Error");
+                        }
+                    },
+                    error: function() {
+                        showMsg("网络连接错误", "Error");
+                    }
+                });
+
+            });
+            //必须有这个，阻止刷新
+            return false;
+        }
+
+        function sysdepartment_add(id) {
+             var url = "/Customer/SysDepartment/Edit?actionType=Edit&id=" + id;
+            //console.log(id);
+            showWindow("show_edit", url, "修改", 700, 240, function() {
+                var form_role = $(window.frames["frm_show_edit"].document).find("#sysdepartment_form");
+                //console.log(form_role);
+                var flag = document.getElementById("frm_show_edit").contentWindow.form_valid();
+                if (!flag) {
+                    return false;
+                }
+                //var data = $(form_role).serializeObject();
+                var data = $(form_role).serialize();
+                //console.log((data));
+                $.ajax({
+                    type: "post",
+                    cache: false,
+                    url: "/api/SysDepartmentApi/EditSysDepartment",
+                    data: data,
+                    dataType: "json",
+                    beforeSend: function() {
+                        showMsg("修改中，请稍后...");
+                    },
+                    complete: function() {
+                        //d.close().remove();
+                    },
+                    success: function(result) {
+                        //toLowerCase报错
+                        //var status = result.Status.toLowerCase();
+                        var status = result.Status;
+                        if (status == true || status == "true" || status == "True") {
+                            //刷新数据
+                            sysdepartment_grid.bootgrid("reload");
+                            //console.log(grid);
+
+                            showMsg("修改成功！", "Success");
+                        } else {
+                            showMsg("系统异常，修改失败！", "Error");
+                        }
+                    },
+                    error: function() {
+                        showMsg("网络连接错误", "Error");
+                    }
+                });
+
+
+            });
+
+            //必须有这个，阻止刷新
+            return false;
+        }
+
+        function sysdepartment_delete(id) {
+            //console.log(id);
+            showDialog("确认删除该吗？", function() {
+                $.ajax({
+                    type: "get",
+                    cache: false,
+                    url: "/api/settings/role/deleteRole/",
+                    data: { id: id },
+                    dataType: "json",
+                    beforeSend: function() {
+                        //showMsg("添加中，请稍后...");
+                    },
+                    complete: function() {
+                        //d.close().remove();
+                    },
+                    success: function(result) {
+                        //toLowerCase报错
+                        //var status = result.Status.toLowerCase();
+                        var status = result.Status;
+                        if (status == true || status == "true" || status == "True") {
+                            //刷新数据
+                            sysdepartment_grid.bootgrid("reload");
+                            showMsg("删除成功！", "Success");
+                        } else {
+                            showMsg("系统异常，删除失败！", "Error");
+                        }
+                    },
+                    error: function() {
+                        showMsg("网络连接错误", "Error");
+                    }
+                });
+            });
+            //必须有这个，阻止刷新
+            return false;
+        }
+    </script>
+ </head>
+    <body>
+<div>
+    <table id="sysdepartment_grid_data" class="table table-condensed table-hover table-striped table-bordered" data-selection="true" data-multi-select="true">
+        <thead>
+            <tr>
+		  <th data-column-id="DepCode" data-header-align="center"  data-formatter="DepCode" data-order="desc">部门编号</th>
+		  <th data-column-id="DepName" data-header-align="center"  data-formatter="DepName" data-order="desc">部门名称</th>
+          <th data-column-id="ParentId" data-header-align="center"  data-formatter="ParentId" data-order="desc">所属父类</th>
+		  <th data-column-id="DepNote" data-header-align="center"  data-formatter="DepNote" data-order="desc">备注</th>
+		  <th data-column-id="DepOrder" data-header-align="center"  data-formatter="DepOrder" data-order="desc">排序</th>
+		  <th data-column-id="CreateDate" data-header-align="center"  data-formatter="CreateDate" data-order="desc">添加时间</th>
+		  <th data-column-id="Id" data-type="numeric" data-identifier="true" data-formatter="commands" data-sortable="false">操作</th>
+		  </tr>
+        </thead>
+    </table>
+</div>
+
+</body>
+</html>
+
+
