@@ -1,0 +1,116 @@
+﻿<#@ template debug="True" hostspecific="True" language="C#" #>
+<#@ Include File="../MultipleOutputHelper.ttinclude" #>
+<#@ Assembly Name="$(TargetDir)NLite.dll" #>
+<#@ Assembly Name="$(TargetDir)ELinq.dll" #>
+<#@ Assembly Name="System.Data" #>
+<#@ Assembly Name="$(TargetDir)MySql.Data.dll" #>
+<#@ Import Namespace="NLite.Data" #>
+<#@ Import Namespace="NLite.Data.CodeGeneration" #>
+<#@ output extension=".cs" #>
+<#
+	var @contextNamespace = "UCsoft.Data";
+	var @ModelNamespace = "UCsoft.Entity";
+	var @Date=System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
+	var connectionStringName = "SqlServer";
+	var dbType=GetAppSettings("databaseType");
+	switch(dbType){
+		    case "SqlServer":
+	        connectionStringName = "SqlServer";
+			break;
+			case "MySql":
+	        connectionStringName = "MySql";
+			break;
+			case "Oracle":
+	        connectionStringName = "Oracle";
+			break;
+			case "Access":
+	        connectionStringName = "Access";
+			break;
+			case "SqlCe":
+	        connectionStringName = "SqlCe";
+			break;
+			case "SqLite":
+	        connectionStringName = "SqLite";
+			break;
+			default:
+			 connectionStringName = "SqlServer";
+			break;
+    }
+	var dbContextName =Path.GetFileNameWithoutExtension(Host.TemplateFile);
+	var connectionStringSetting = GetConnectionStringSettings(connectionStringName);
+	var connectionString = connectionStringSetting.ConnectionString;
+	var dbProviderName = connectionStringSetting.ProviderName;
+	var dbConfiguration = DbConfiguration.Configure(connectionString, dbProviderName);
+	var databaseSchema = dbConfiguration.Schema;
+	var manager = Manager.Create(Host, GenerationEnvironment);
+#>
+
+<#
+  //开始Model======================================================================================
+    foreach (var tb in databaseSchema.Tables){
+#>
+<#
+manager.StartNewFile(NamingConversion.Default.ClassName(tb.TableName)+ ".cs");
+#>
+using System;
+using System.Collections.Generic;
+using NLite.Data;
+namespace <#= @ModelNamespace #>
+{
+	[Table("<#= tb.TableName #>")]
+	public partial class <#= NamingConversion.Default.ClassName( tb.TableName) #> 
+	{
+<#foreach (var col in tb.PrimaryKeys){#>	
+		[Id("<#= col.ColumnName#>",IsDbGenerated=<#= col.IsGenerated.ToString().ToLower() #>)]
+		public <#= NamingConversion.Default.DataType(col) #> <#= NamingConversion.Default.PropertyName(col.ColumnName) #> { get;set; }
+<#}#> 
+<#foreach (var col in tb.Columns){#>
+		[Column("<#= col.ColumnName#>")]
+		public <#= NamingConversion.Default.DataType(col) #> <#= NamingConversion.Default.PropertyName(col.ColumnName) #> { get;set; }
+<#}#> 
+<#foreach (var fk in tb.ForeignKeys){#>
+		[ManyToOne(ThisKey="<#= NamingConversion.Default.PropertyName( fk.ThisKey.ColumnName) #>",OtherKey="<#= NamingConversion.Default.PropertyName(fk.OtherKey.ColumnName) #>")]
+		public <#= NamingConversion.Default.ClassName(fk.OtherTable.TableName) #> <#= NamingConversion.Default.ManyToOneName(fk) #> { get;set; }
+<#}#> 
+<#foreach (var fk in tb.Children){#>
+		[OneToMany(ThisKey="<#= NamingConversion.Default.PropertyName( fk.ThisKey.ColumnName) #>",OtherKey="<#= NamingConversion.Default.PropertyName(fk.OtherKey.ColumnName) #>")]
+		public IList<<#= NamingConversion.Default.ClassName(fk.OtherTable.TableName) #>> <#= NamingConversion.Default.QueryableName(fk.OtherTable.TableName) #> { get;set; }
+<#}#> 
+	}
+<# } 
+	 manager.EndBlock();
+     foreach (var tb in databaseSchema.Views){
+	 manager.StartNewFile(NamingConversion.Default.ClassName(tb.TableName) + ".cs");
+	 //开始视图
+	 #>
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using NLite.Data;
+namespace <#= @ModelNamespace #>
+{
+	
+	[Table("<#= tb.TableName #>",Readonly=true)]
+	public partial class <#= NamingConversion.Default.ClassName( tb.TableName) #> 
+	{
+<#foreach (var col in tb.Columns){#>
+		[Column("<#= col.ColumnName#>")]
+		public <#= col.Type.Name #> <#= NamingConversion.Default.PropertyName(col.ColumnName) #> { get;set; }
+
+		 
+<#}#>  
+     
+		  }
+<# 
+	} 
+
+ manager.EndBlock();
+  manager.StartFooter();
+#>
+}
+<#
+ //执行===================================================================================
+ manager.Process(true);
+#>

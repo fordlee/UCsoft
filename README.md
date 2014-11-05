@@ -2,7 +2,7 @@
 ===========
 
 优创软件平台。使用Spring .NET、ASP .NET MVC、ELinq作为基本项目架构，同时使
-Unit Test单元测试、RouteDebug路由测试、Log4Net日志记录、SqlServer作为数据库、T4模板代码自动生成
+Unit Test单元测试、RouteDebug路由测试、Log4Net日志记录、支持多数据库，目前支持Access、SQLServer、SqlCE、SQLite、MySQL、ORACLE，未来还会支持更多的数据库、T4模板代码自动生成
 、Bootstrape作为前端框架。
 
 版本信息
@@ -15,14 +15,14 @@ Unit Test单元测试、RouteDebug路由测试、Log4Net日志记录、SqlServer
 项目简介
 -------
 >优创软件平台。使用Spring .NET、ASP .NET MVC、ELinq作为基本项目架构，同时使
-Unit Test单元测试、RouteDebug路由测试、Log4Net日志记录、SqlServer作为数据库、T4模板代码自动生成
+Unit Test单元测试、RouteDebug路由测试、Log4Net日志记录、支持多数据库，目前支持Access、SQLServer、SqlCE、SQLite、MySQL、ORACLE，未来还会支持更多的数据库、T4模板代码自动生成
 、Bootstrape作为前端框架。
 
 
 技术架构
 ------
 >1、本程序基于Asp .Net 4.0和.NET MVC4，编译版本为VS2013，最低运行版本为.Net 4.0，IIS 6.0+；  
->2、支持MySQL、SQLServer数据库切换，使用 ELinq作为ORM框架。    
+>2、支持Access、SQLServer、SqlCE、SQLite、MySQL、ORACLE数据库切换，使用 ELinq作为ORM框架。    
 >3、兼容IE6、7、8+、Firefox、Chrome、Safari             
 
 更新历史
@@ -37,7 +37,7 @@ Unit Test单元测试、RouteDebug路由测试、Log4Net日志记录、SqlServer
 
 程序发布
 -------
-
+1、如果使用MySQL数据库，需要安装 mysql-connector-net-6.8.3.msi。   
 
 参考资料
 -------
@@ -49,10 +49,12 @@ Unit Test单元测试、RouteDebug路由测试、Log4Net日志记录、SqlServer
 [http://www.cnblogs.com/dingji/archive/2012/05/17/2506587.html](http://www.cnblogs.com/dingji/archive/2012/05/17/2506587.html)   
 4、使用Areas分离ASP.NET MVC项目     
 [http://www.cnblogs.com/dingji/archive/2012/05/30/2506420.html](http://www.cnblogs.com/dingji/archive/2012/05/30/2506420.html)     
-
+5、ELinq    
+[http://elinq.codeplex.com/](http://elinq.codeplex.com/)
 
 改进方案
--------                                                                                                            
+-------                                                               
+1、SqLite和Oracle暂时未进行严格测试。                                                
 
 
 

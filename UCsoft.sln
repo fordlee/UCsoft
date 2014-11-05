@@ -18,6 +18,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UCsoft.Web.Tests", "UCsoft.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UCsoft.T4", "UCsoft.T4\UCsoft.T4.csproj", "{2844FCC1-6FB7-4A64-B67D-C4C7358BFB90}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UCsoft.Data", "UCsoft.Data\UCsoft.Data.csproj", "{D30BF1E8-C5A6-49E9-B756-20A561D9F76F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UCsoft.Setup", "UCsoft.Setup", "{598547DB-EC02-49B4-8406-A6EEBBC1FE7F}"
+	ProjectSection(SolutionItems) = preProject
+		mysql-connector-net-6.8.3.msi = mysql-connector-net-6.8.3.msi
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UCsoft.Entity", "UCsoft.Entity\UCsoft.Entity.csproj", "{45E160A7-334B-4473-AD23-4753A456B6E8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +45,14 @@ Global
 		{2844FCC1-6FB7-4A64-B67D-C4C7358BFB90}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2844FCC1-6FB7-4A64-B67D-C4C7358BFB90}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2844FCC1-6FB7-4A64-B67D-C4C7358BFB90}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D30BF1E8-C5A6-49E9-B756-20A561D9F76F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D30BF1E8-C5A6-49E9-B756-20A561D9F76F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D30BF1E8-C5A6-49E9-B756-20A561D9F76F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D30BF1E8-C5A6-49E9-B756-20A561D9F76F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45E160A7-334B-4473-AD23-4753A456B6E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45E160A7-334B-4473-AD23-4753A456B6E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45E160A7-334B-4473-AD23-4753A456B6E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45E160A7-334B-4473-AD23-4753A456B6E8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
