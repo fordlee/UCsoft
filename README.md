@@ -47,7 +47,8 @@ Unit Test单元测试、RouteDebug路由测试、Log4Net日志记录、SqlServer
 [http://equation85.github.io/blog/markdown-examples/](http://equation85.github.io/blog/markdown-examples/ )  
 3、Asp.Net MVC路由调试的好帮手RouteDebugger   
 [http://www.cnblogs.com/dingji/archive/2012/05/17/2506587.html](http://www.cnblogs.com/dingji/archive/2012/05/17/2506587.html)   
-4、
+4、使用Areas分离ASP.NET MVC项目     
+[http://www.cnblogs.com/dingji/archive/2012/05/30/2506420.html](http://www.cnblogs.com/dingji/archive/2012/05/30/2506420.html)     
 
 
 改进方案
