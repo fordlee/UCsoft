@@ -20,7 +20,7 @@ using System.Web.Optimization;
 /// The Web namespace.
 /// </summary>
 
-namespace Ed.Web
+namespace UCsoft.Web
 {
     /// <summary>
     /// Class BundleConfig.
