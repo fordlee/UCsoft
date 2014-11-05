@@ -27,6 +27,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UCsoft.Setup", "UCsoft.Setu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UCsoft.Entity", "UCsoft.Entity\UCsoft.Entity.csproj", "{45E160A7-334B-4473-AD23-4753A456B6E8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UCsoft.Common", "UCsoft.Common\UCsoft.Common.csproj", "{EA759968-538A-4EF7-A207-4383CDE17C6D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{45E160A7-334B-4473-AD23-4753A456B6E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45E160A7-334B-4473-AD23-4753A456B6E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45E160A7-334B-4473-AD23-4753A456B6E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA759968-538A-4EF7-A207-4383CDE17C6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA759968-538A-4EF7-A207-4383CDE17C6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA759968-538A-4EF7-A207-4383CDE17C6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA759968-538A-4EF7-A207-4383CDE17C6D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -46,6 +46,9 @@
     <Reference Include="Common.Logging">
       <HintPath>..\packages\Common.Logging.2.1.2\lib\net40\Common.Logging.dll</HintPath>
     </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="RouteDebug">
       <HintPath>..\packages\routedebugger.1.0.0\lib\RouteDebug.dll</HintPath>
@@ -292,10 +295,19 @@
     <Content Include="Areas\Account\Views\Login\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\UCsoft.Common\UCsoft.Common.csproj">
+      <Project>{ea759968-538a-4ef7-a207-4383cde17c6d}</Project>
+      <Name>UCsoft.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\UCsoft.Entity\UCsoft.Entity.csproj">
       <Project>{45e160a7-334b-4473-ad23-4753a456b6e8}</Project>
       <Name>UCsoft.Entity</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="log4net.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
