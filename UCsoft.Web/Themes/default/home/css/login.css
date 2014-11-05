@@ -1,0 +1,97 @@
+@charset "utf-8";
+/* CSS Document */
+.layout-login {
+position: absolute;
+top: 50%;
+width: 100%;
+margin-top: -230px;
+}
+.ll-book-container {
+width: 540px;
+margin: 0 auto;
+}
+.ll-logo-area {
+height: 210px;
+overflow: hidden;
+position: relative;
+}
+.ll-logo-area img {
+margin: 0 auto;
+display: block;
+}
+.logo-con {
+background: url(../images/v-logo-big-con.png) center 0 no-repeat;
+width: 209px;
+height: 30px;
+margin: 20px auto 0;
+}
+.logo-intro {
+font-size: 16px;
+font-weight: 400;
+color: #BDC8D3;
+text-align: center;
+padding-top: 20px;
+}
+.form-container {
+margin: 0 auto;
+position: relative;
+z-index: 10;
+min-height:130px; height:auto
+}
+.mi-find-phone {
+width: 200px;
+color: #ACCFDE;
+margin: 10px auto;
+text-align: center;
+background: #307FAA;
+}
+#cloud_find_phone {
+margin: 10px auto;
+}
+.mi-find-phone {
+width: 200px;
+color: #ACCFDE;
+margin: 10px auto;
+text-align: center;
+background: #307FAA;
+}
+.mi-find-phone, .mi-learn-more {
+display: block;
+margin: 0 auto 10px;
+height: 30px;
+line-height: 30px;
+text-decoration: none;
+font-size: 14px;
+background: #296D92;
+border-radius: 8px;
+width: 110px;
+}
+.milm-find-ico {
+display: inline-block;
+width: 18px;
+height: 16px;
+background: url(../images/global-mi-ico.png) 0 -156px;
+vertical-align: -2px;
+margin-right: 4px;
+}
+
+
+/*.loading-img{display: none!important;}*/
+.ng-form-area {display:block!important; width: 324px; padding-top: 10px; height:280px; margin:0 auto; position: relative;min-height: 120px; height: auto; }
+.shake-area{position: relative;}
+input:focus {outline:none;}
+.enter-area {position: relative; margin-bottom: 20px;}
+.enter-item {background: #235376; border: 1px solid #598fab; width: 278px; display: block; height: 19px; line-height: 19px; padding:11px 20px; 
+border-radius: 22px; color: #f0f4f6; font-size: 14px; font-weight: bold; }
+.enter-item:focus {background: #11466b; border: 1px solid #598fab;}
+.orange {display:block; margin:0; border:0 none; background:none; position: absolute; 
+top:73px; right:4px; z-index: 10; width: 44px; height: 44px; z-index: 60;
+border-radius: 0 3px 3px 0; text-indent: 200px; overflow: hidden;}
+#other_method,.orange{cursor:pointer; background: url(../images/login_ico.png) 0 0 no-repeat;}
+.orange:hover{background-position: 0 -55px;}
+.orange:active{background-position: 0 -107px;}
+.change-interface{width: 278px;border-radius: 22px;border: 1px solid #3e7696;}
+@media screen and (max-width: 400px) {
+.ng-form-area{width: 300px;}
+.enter-item{width: 298px; height:43px; -webkit-box-sizing:border-box; -moz-box-sizing:border-box; -ms-box-sizing:border-box; -o-box-sizing:border-box; box-sizing:border-box;
+}

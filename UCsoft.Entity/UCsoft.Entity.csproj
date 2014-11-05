@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResponseMessage.cs" />
     <Compile Include="TCusBase.cs" />
     <Compile Include="TCusCon.cs" />
     <Compile Include="TCusLog.cs" />

@@ -15,6 +15,24 @@
             </summary>
             <param name="bundles">The bundles.</param>
         </member>
+        <member name="T:UCsoft.Web.Areas.Account.Controllers.LoginController">
+            <summary>
+            Class LoginController.
+            2014-10-13 20:09:45 修改 By 唐有炜
+            </summary>
+        </member>
+        <member name="M:UCsoft.Web.Areas.Account.Controllers.LoginController.Index">
+            <summary>
+            Indexes this instance.
+            </summary>
+            <returns>ActionResult.</returns>
+        </member>
+        <member name="M:UCsoft.Web.Areas.Account.Controllers.LoginController.ForgetPassword">
+            <summary>
+            Forgets the password.
+            </summary>
+            <returns>ActionResult.</returns>
+        </member>
         <member name="M:UCsoft.Web.Api.Areas.HelpPage.ApiDescriptionExtensions.GetFriendlyId(System.Web.Http.Description.ApiDescription)">
             <summary>
             Generates an URI-friendly ID for the <see cref="T:System.Web.Http.Description.ApiDescription"/>. E.g. "Get-Values-id_name" instead of "GetValues/{id}?name={name}"

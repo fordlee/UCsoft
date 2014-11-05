@@ -127,6 +127,7 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="Areas\Account\AccountAreaRegistration.cs" />
+    <Compile Include="Areas\Account\Controllers\LoginController.cs" />
     <Compile Include="Areas\Customer\Controllers\CusBaseApiController.cs" />
     <Compile Include="Areas\Customer\Controllers\CusBaseController.cs" />
     <Compile Include="Areas\Customer\CustomerAreaRegistration.cs" />
@@ -238,9 +239,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\Account\Controllers\" />
     <Folder Include="Areas\Account\Views\Shared\" />
     <Folder Include="Areas\Customer\Views\Shared\" />
+    <Folder Include="Filters\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -269,6 +270,16 @@
     <Content Include="Areas\HelpPage\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\HelpPage\Views\Web.config" />
     <Content Include="Areas\HelpPage\Views\_ViewStart.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Account\Views\Login\ForgetPassword.cshtml" />
+    <Content Include="Areas\Account\Views\Login\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\UCsoft.Entity\UCsoft.Entity.csproj">
+      <Project>{45e160a7-334b-4473-ad23-4753a456b6e8}</Project>
+      <Name>UCsoft.Entity</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

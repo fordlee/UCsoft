@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using Microsoft.Ajax.Utilities;
 
 namespace UCsoft.Web.Areas.Account
 {
@@ -17,7 +18,9 @@ namespace UCsoft.Web.Areas.Account
             context.MapRoute(
                 "Account_default",
                 "Account/{controller}/{action}/{id}",
-                new { action = "Index", id = UrlParameter.Optional }
+                new { action = "Index", id = UrlParameter.Optional },
+                null,
+                new[] { "UCsoft.Web.Areas.Account.Controllers" }
             );
         }
     }
