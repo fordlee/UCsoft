@@ -2,7 +2,7 @@
 ===========
 
 优创软件平台。使用Spring .NET、ASP .NET MVC、ELinq作为基本项目架构，同时使
-Unit Test单元测试、Log4Net日志记录、SqlServer作为数据库（支持多数据库切换）、T4模板代码自动生成
+Unit Test单元测试、RouteDebug路由测试、Log4Net日志记录、SqlServer作为数据库、T4模板代码自动生成
 、Bootstrape作为前端框架。
 
 版本信息
@@ -15,7 +15,7 @@ Unit Test单元测试、Log4Net日志记录、SqlServer作为数据库（支持�
 项目简介
 -------
 >优创软件平台。使用Spring .NET、ASP .NET MVC、ELinq作为基本项目架构，同时使
-Unit Test单元测试、Log4Net日志记录、SqlServer作为数据库、T4模板代码自动生成
+Unit Test单元测试、RouteDebug路由测试、Log4Net日志记录、SqlServer作为数据库、T4模板代码自动生成
 、Bootstrape作为前端框架。
 
 
