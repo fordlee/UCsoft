@@ -22,7 +22,7 @@ namespace UCsoft.Web
 
 
             //测试路由
-            RouteDebug.RouteDebugger.RewriteRoutesForTesting(RouteTable.Routes);
+            //RouteDebug.RouteDebugger.RewriteRoutesForTesting(RouteTable.Routes);
         }
     }
 }
