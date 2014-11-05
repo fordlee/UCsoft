@@ -5,7 +5,7 @@
 @model Collection<ApiDescription>
 
 @{
-    ViewBag.Title = "雪绒花Api帮助文档";
+    ViewBag.Title = "Api帮助文档";
 
     // Group APIs by controller
     ILookup<string, ApiDescription> apiGroups = Model.ToLookup(api => api.ActionDescriptor.ControllerDescriptor.ControllerName);
@@ -23,7 +23,7 @@
         <div class="content-wrapper">
             <h2>介绍</h2>
             <p>
-                雪绒花Api帮助文档参数说明与调用示例。
+              Api帮助文档参数说明与调用示例。
             </p>
         </div>
     </section>
